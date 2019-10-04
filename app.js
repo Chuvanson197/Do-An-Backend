@@ -6,6 +6,7 @@ var logger = require("morgan");
 var passport = require("passport");
 
 var memberRouter = require("./routes/member");
+var authenRouter = require("./routes/authencation");
 var accountRouter = require("./routes/account");
 var customerRouter = require("./routes/customer");
 var projectRouter = require("./routes/project");
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(passport.initialize());
 
 app.use("/api", accountRouter);
+app.use("/api/auth", authenRouter);
 app.use("/api/members", memberRouter);
 app.use("/api/customers", customerRouter);
 app.use("/api/projects", projectRouter);
