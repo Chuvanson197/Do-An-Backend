@@ -3,11 +3,7 @@ var router = express.Router();
 var Customer = require("../Models/Customer");
 const passport = require("passport");
 
-router.get("/", passport.authenticate("jwt", { session: false }), function(
-  req,
-  res,
-  next
-) {
+router.get("/", function(req, res, next) {
   Customer.getAllCustomer((err, result) => {
     if (err) {
       res.status(400).json(err);
@@ -18,11 +14,7 @@ router.get("/", passport.authenticate("jwt", { session: false }), function(
 });
 
 /* GET get customer by id. */
-router.get("/:id", passport.authenticate("jwt", { session: false }), function(
-  req,
-  res,
-  next
-) {
+router.get("/:id", function(req, res, next) {
   Customer.getCustomerById(req.params.id, (err, result) => {
     if (err) {
       res.status(400).json(err);
@@ -33,11 +25,7 @@ router.get("/:id", passport.authenticate("jwt", { session: false }), function(
 });
 
 /* POST add new customer */
-router.post("/", passport.authenticate("jwt", { session: false }), function(
-  req,
-  res,
-  next
-) {
+router.post("/", function(req, res, next) {
   Customer.addCustomer(req.body, (err, result) => {
     if (err) {
       res.status(400).json(err);
@@ -48,11 +36,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), function(
 });
 
 /* PUT update customer */
-router.put("/:id", passport.authenticate("jwt", { session: false }), function(
-  req,
-  res,
-  next
-) {
+router.put("/:id", function(req, res, next) {
   Customer.updateCustomer(req.params.id, req.body, (err, result) => {
     if (err) {
       res.status(400).json(err);
