@@ -2,16 +2,6 @@ create database if not exists `project_management`;
 
 use `project_management`;
 
-create table if not exists `accounts`(
-	`id` int not null auto_increment primary key,
-    `username` varchar(100) not null,
-    `password` varchar(100) not null,
-    `email` varchar(100) not null
-) engine = InnoDB;
-
-alter table `accounts` add constraint `uq_username` unique(`username`);
-alter table `accounts` add constraint `uq_email` unique(`email`);
-
 create table if not exists `customers`(
 	`id` int not null auto_increment primary key,
     `name` varchar(100) not null,
