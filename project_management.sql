@@ -28,7 +28,7 @@ create table if not exists `members`(
 	`id` int not null auto_increment primary key,
     `staff_code` varchar(50) not null,
     `full_name` varchar(100) not null,
-    `phone_number` varchar(11) not null,
+    `phone_number` varchar(50) not null,
     `email` varchar(100) not null,
     `hidden` boolean default false
 ) engine = InnoDB;
@@ -43,8 +43,7 @@ create table if not exists `project_member` (
     `role` varchar(50) not null,
     `time_in` timestamp default current_timestamp not null,
     `time_out` timestamp,
-    `effort` float not null,
-    `hidden` boolean default false
+    `effort` float not null
 ) engine = InnoDB;
 
 alter table `project_member` add constraint fk_projectMember_projects foreign key(`project_id`) references `projects`(`id`);
