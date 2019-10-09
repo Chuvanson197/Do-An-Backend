@@ -5,9 +5,10 @@ use `project_management`;
 create table if not exists `customers`(
 	`id` int not null auto_increment primary key,
     `name` varchar(100) not null,
-    `phone_number` varchar(11) not null,
+    `phone_number` varchar(50) not null,
     `email` varchar(100) not null,
-    `address` varchar(500) not null
+    `address` varchar(500) not null,
+    `hidden` boolean default false
 ) engine = InnoDB;
 
 create table if not exists `projects`(
@@ -17,7 +18,8 @@ create table if not exists `projects`(
     `status` varchar(100) not null,
     `start_time` timestamp not null,
     `end_time` timestamp,
-    `service_detail` json
+    `service_detail` json,
+    `hidden` boolean default false
 ) engine = InnoDB;
 
 alter table `projects` add constraint fk_projects_customers foreign key(`customer_id`) references `customers`(`id`);
@@ -26,8 +28,9 @@ create table if not exists `members`(
 	`id` int not null auto_increment primary key,
     `staff_code` varchar(50) not null,
     `full_name` varchar(100) not null,
-    `phone_number` varchar(11) not null,
-    `email` varchar(100) not null
+    `phone_number` varchar(50) not null,
+    `email` varchar(100) not null,
+    `hidden` boolean default false
 ) engine = InnoDB;
 
 alter table `members` add constraint `uq_staff_code` unique(`staff_code`);

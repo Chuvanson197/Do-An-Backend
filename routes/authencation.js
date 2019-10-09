@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const request = require("request");
 
+/* POST authen api */
 router.post("/", function(req, res, next) {
   if (req.body.google_access_token) {
     request.post(
