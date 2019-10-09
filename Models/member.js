@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Project = sequelize.define(
-    "Project",
+  const Member = sequelize.define(
+    "Member",
     {
       id: {
         allowNull: false,
@@ -9,23 +9,22 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      name: {
+      staff_code: {
         allowNull: false,
-        type: DataTypes.STRING(150)
+        unique: true,
+        type: DataTypes.STRING(50)
       },
-      status: {
+      full_name: {
         allowNull: false,
         type: DataTypes.STRING(100)
       },
-      start_time: {
+      phone_number: {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.STRING(50)
       },
-      end_time: {
-        type: DataTypes.DATE
-      },
-      service_detail: {
-        type: DataTypes.JSON
+      email: {
+        allowNull: false,
+        type: DataTypes.STRING(100)
       },
       hidden: {
         type: DataTypes.BOOLEAN,
@@ -35,14 +34,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: false,
       underscored: true,
-      tableName: "projects"
+      tableName: "members"
     }
   );
-  Project.associate = function(models) {
-    Project.belongsTo(models.Customer, {
-      as: 'customer',
-      foreignKey: "customer_id"
-    });
-  };
-  return Project;
+  Member.associate = function(models) {};
+  return Member;
 };
