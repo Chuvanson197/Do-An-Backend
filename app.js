@@ -3,13 +3,14 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var passport = require("passport");
 
 //DB connection
 require("./database/connection");
 
-var customerRouter = require("./routes/customer");
 var authRouter = require("./routes/authencation");
+var customerRouter = require("./routes/customer");
+var projectRouter = require("./routes/project");
+var memberRouter = require("./routes/member");
 
 var app = express();
 
@@ -22,10 +23,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(passport.initialize());
 
 app.use("/api/customers", customerRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/projects", projectRouter);
+app.use("/api/members", memberRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
