@@ -123,7 +123,40 @@ module.exports = {
           attributes: ["staff_code", "full_name", "phone_number", "email"]
         }
       ]
-    }).catch(error => res.status(400).json(error));
+    }).catch(() =>
+      res.status(400).json({
+        message: "Get members list failure"
+      })
+    );
+  },
+  getMembersListByTime(project_id, req, res) {
+    const time_in = moment(req.body.time_in).format("YYYY-MM-DDTHH:mm:ss");
+    const time_out = moment(req.body.time_out).format("YYYY-MM-DDTHH:mm:ss");
+    return ProjectMember.findAll({
+      attributes: [
+        "id",
+        "member_status",
+        "role",
+        "time_in",
+        "time_out",
+        "effort"
+      ],
+      where: {
+        project_id,
+        hidden: 0,
+        time_in:[time_in, time_out],
+        time_out: [time_in, time_out]
+      },
+      include: [
+        {
+          model: Member,
+          as: "member_detail",
+          attributes: ["staff_code", "full_name", "phone_number", "email"]
+        }
+      ]
+    }).catch(() =>
+      res.status(400).json({ message: "Get members list failure" })
+    );
   },
   addMember(req, res) {
     return ProjectMember.create({

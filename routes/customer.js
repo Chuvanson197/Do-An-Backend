@@ -20,12 +20,15 @@ router.get("/:id", cors(corsOptions), async function(req, res, next) {
 /* POST add new customer api */
 router.post("/", cors(corsOptions), async function(req, res, next) {
   const customer = await Customer.create(req, res);
-  let result = null;
-  if(customer) {
-    result = customer.dataValues;
-    delete result.hidden;
+  if (customer) {
+    res.json({
+      message: "Create new customer successful"
+    });
+  } else {
+    res.json({
+      message: "Create new customer failure"
+    });
   }
-  res.json(result);
 });
 
 /* POST remove customer api */
@@ -33,11 +36,11 @@ router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Customer.remove(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Remove member failure"
+      message: "Remove customer information failure"
     });
   } else {
     res.json({
-      message: "Remove member successful"
+      message: "Remove customer information successful"
     });
   }
 });
@@ -47,11 +50,11 @@ router.put("/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Customer.update(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Update failure"
+      message: "Update customer information failure"
     });
   } else {
     res.json({
-      message: "Update successful"
+      message: "Update customer information successful"
     });
   }
 });

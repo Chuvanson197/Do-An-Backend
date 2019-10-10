@@ -22,22 +22,30 @@ router.post("/", cors(corsOptions), async function(req, res, next) {
   const member = await Member.create(req, res);
   let result = null;
   if (member) {
-    result = member.dataValues;
-    delete result.hidden;
+    res.json({
+      message: "Add new member information successful"
+    });
+  } else {
+    res.status(400).json({
+      message: "Add new member information successful"
+    });
   }
-  res.json(result);
 });
 
 /* POST remove member api */
-router.post("/remove/:staff_code", cors(corsOptions), async function(req, res, next) {
+router.post("/remove/:staff_code", cors(corsOptions), async function(
+  req,
+  res,
+  next
+) {
   const result = await Member.remove(req.params.staff_code, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Remove member failure"
+      message: "Remove member information failure"
     });
   } else {
     res.json({
-      message: "Remove members successful"
+      message: "Remove member information successful"
     });
   }
 });
@@ -47,11 +55,11 @@ router.put("/:staff_code", cors(corsOptions), async function(req, res, next) {
   const result = await Member.update(req.params.staff_code, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Update failure"
+      message: "Update member information failure"
     });
   } else {
     res.json({
-      message: "Update successful"
+      message: "Update member information successful"
     });
   }
 });

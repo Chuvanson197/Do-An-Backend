@@ -38,7 +38,11 @@ router.get("/:id", cors(corsOptions), async function(req, res, next) {
 });
 
 /* GET get all members in project api */
-router.get("/membersList/:project_id", cors(corsOptions), async function(req, res, next) {
+router.get("/membersList/:project_id", cors(corsOptions), async function(
+  req,
+  res,
+  next
+) {
   const membersList = await Project.getMembersList(req.params.project_id, res);
   let result = null;
   if (membersList) {
@@ -53,19 +57,48 @@ router.get("/membersList/:project_id", cors(corsOptions), async function(req, re
   res.json(result);
 });
 
+/*POST get all members in project by time_in and time_out */
+router.post("/membersList/:project_id", cors(corsOptions), async function(
+  req,
+  res,
+  next
+) {
+  if (!req.body.time_in && !req.body.time_out) {
+    res.status(400).json({
+      message: "time in & time out is required"
+    });
+  } else {
+    const membersList = await Project.getMembersListByTime(
+      req.params.project_id,
+      req,
+      res
+    );
+    let result = null;
+    if (membersList) {
+      result = membersList.map(member => {
+        return {
+          ...member.dataValues,
+          time_in: moment(member.time_in).format("x"),
+          time_out: moment(member.time_out).format("x")
+        };
+      });
+    }
+    res.json(result);
+  }
+});
+
 /* POST add new project api */
 router.post("/", cors(corsOptions), async function(req, res, next) {
   const project = await Project.create(req, res);
-  let result = null;
   if (project) {
-    result = {
-      ...project.dataValues,
-      start_time: moment(project.start_time).format("x"),
-      end_time: moment(project.end_time).format("x")
-    };
-    delete result.hidden;
+    res.json({
+      message: "Add new project information successful"
+    });
+  } else {
+    res.json({
+      message: "Add new project information failure"
+    });
   }
-  res.json(result);
 });
 
 /* POST remove project api */
@@ -73,11 +106,11 @@ router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Project.remove(req.params.id, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Remove project failure"
+      message: "Remove project information failure"
     });
   } else {
     res.json({
-      message: "Remove project successful"
+      message: "Remove project information successful"
     });
   }
 });
@@ -87,47 +120,61 @@ router.put("/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Project.update(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Update failure"
+      message: "Update project information failure"
     });
   } else {
     res.json({
-      message: "Update successful"
+      message: "Update project information successful"
     });
   }
 });
 
 /* POST add member into project api */
 router.post("/membersList", cors(corsOptions), async function(req, res, next) {
-  const project = await Project.addMember(req, res);
-  let result = project.dataValues;
-  delete result.hidden;
-  res.json(result);
-});
-
-/* PUT edit member in project api */
-router.put("/membersList/:id", cors(corsOptions), async function(req, res, next) {
-  const result = await Project.updateMemberJoined(req.params.id, req, res);
-  if (!result[0]) {
-    res.status(400).json({
-      message: "Update failure"
+  const result = await Project.addMember(req, res);
+  if (result) {
+    res.json({
+      message: "Add member into project successful"
     });
   } else {
     res.json({
-      message: "Update successful"
+      message: "Add member into project failure"
     });
   }
 });
 
 /* PUT edit member in project api */
-router.post("/membersList/remove/:id", cors(corsOptions), async function(req, res, next) {
-  const result = await Project.removeMember(req.params.id, res);
+router.put("/membersList/:id", cors(corsOptions), async function(
+  req,
+  res,
+  next
+) {
+  const result = await Project.updateMemberJoined(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Remove member failure"
+      message: "Update member in project information failure"
     });
   } else {
     res.json({
-      message: "Remove member successful"
+      message: "Update member in project information successful"
+    });
+  }
+});
+
+/* PUT remove member in project api */
+router.post("/membersList/remove/:id", cors(corsOptions), async function(
+  req,
+  res,
+  next
+) {
+  const result = await Project.removeMember(req.params.id, res);
+  if (!result[0]) {
+    res.status(400).json({
+      message: "Remove member from project failure"
+    });
+  } else {
+    res.json({
+      message: "Remove member from project successful"
     });
   }
 });
