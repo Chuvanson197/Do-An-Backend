@@ -1,14 +1,17 @@
 var express = require("express");
 var router = express.Router();
-const request = require("request");
+var request = require("request");
+var cors = require("cors");
+
+const corsOptions = require("../config/corsOptions");
 
 /* POST authen api */
-router.post("/", function(req, res, next) {
-  if (req.body.google_access_token) {
+router.post("/", cors(corsOptions), function(req, res, next) {
+  if (req.body.googleAccessToken) {
     request.post(
       {
         url: "http://timesheet.impl.vn/api/auth/google",
-        form: { token: req.body.google_access_token }
+        form: { token: req.body.googleAccessToken }
       },
       function(error, httpResponse, body) {
         if (error) {
