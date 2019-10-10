@@ -1,22 +1,24 @@
 var express = require("express");
 var router = express.Router();
+var cors = require("cors");
 
+const corsOptions = require("../config/corsOptions");
 var Customer = require("../controllers").customer;
 
 /* GET get all customers api */
-router.get("/", async function(req, res, next) {
+router.get("/", cors(corsOptions), async function(req, res, next) {
   const customers = await Customer.findAll();
   res.json(customers);
 });
 
 /* GET get customer by customer id api */
-router.get("/:id", async function(req, res, next) {
+router.get("/:id", cors(corsOptions), async function(req, res, next) {
   const customer = await Customer.findById(req.params.id, res);
   res.json(customer);
 });
 
 /* POST add new customer api */
-router.post("/", async function(req, res, next) {
+router.post("/", cors(corsOptions), async function(req, res, next) {
   const customer = await Customer.create(req, res);
   let result = null;
   if(customer) {
@@ -27,7 +29,7 @@ router.post("/", async function(req, res, next) {
 });
 
 /* POST remove customer api */
-router.post("/remove/:id", async function(req, res, next) {
+router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Customer.remove(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
@@ -41,7 +43,7 @@ router.post("/remove/:id", async function(req, res, next) {
 });
 
 /* PUT update customer api */
-router.put("/:id", async function(req, res, next) {
+router.put("/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Customer.update(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({

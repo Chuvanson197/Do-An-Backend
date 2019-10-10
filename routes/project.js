@@ -1,11 +1,13 @@
 var express = require("express");
 var router = express.Router();
 var moment = require("moment");
+var cors = require("cors");
 
+const corsOptions = require("../config/corsOptions");
 var Project = require("../controllers").project;
 
 /* GET get all projects api */
-router.get("/", async function(req, res, next) {
+router.get("/", cors(corsOptions), async function(req, res, next) {
   const projects = await Project.findAll();
   let result = null;
   if (projects) {
@@ -21,7 +23,7 @@ router.get("/", async function(req, res, next) {
 });
 
 /* GET get project by project id api */
-router.get("/:id", async function(req, res, next) {
+router.get("/:id", cors(corsOptions), async function(req, res, next) {
   const projects = await Project.findById(req.params.id);
   let result = null;
   if (projects) {
@@ -36,7 +38,7 @@ router.get("/:id", async function(req, res, next) {
 });
 
 /* GET get all members in project api */
-router.get("/membersList/:project_id", async function(req, res, next) {
+router.get("/membersList/:project_id", cors(corsOptions), async function(req, res, next) {
   const membersList = await Project.getMembersList(req.params.project_id, res);
   let result = null;
   if (membersList) {
@@ -52,7 +54,7 @@ router.get("/membersList/:project_id", async function(req, res, next) {
 });
 
 /* POST add new project api */
-router.post("/", async function(req, res, next) {
+router.post("/", cors(corsOptions), async function(req, res, next) {
   const project = await Project.create(req, res);
   let result = null;
   if (project) {
@@ -67,7 +69,7 @@ router.post("/", async function(req, res, next) {
 });
 
 /* POST remove project api */
-router.post("/remove/:id", async function(req, res, next) {
+router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Project.remove(req.params.id, res);
   if (!result[0]) {
     res.status(400).json({
@@ -81,7 +83,7 @@ router.post("/remove/:id", async function(req, res, next) {
 });
 
 /* PUT update project api */
-router.put("/:id", async function(req, res, next) {
+router.put("/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Project.update(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
@@ -95,7 +97,7 @@ router.put("/:id", async function(req, res, next) {
 });
 
 /* POST add member into project api */
-router.post("/membersList", async function(req, res, next) {
+router.post("/membersList", cors(corsOptions), async function(req, res, next) {
   const project = await Project.addMember(req, res);
   let result = project.dataValues;
   delete result.hidden;
@@ -103,7 +105,7 @@ router.post("/membersList", async function(req, res, next) {
 });
 
 /* PUT edit member in project api */
-router.put("/membersList/:id", async function(req, res, next) {
+router.put("/membersList/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Project.updateMemberJoined(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
@@ -117,7 +119,7 @@ router.put("/membersList/:id", async function(req, res, next) {
 });
 
 /* PUT edit member in project api */
-router.post("/membersList/remove/:id", async function(req, res, next) {
+router.post("/membersList/remove/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Project.removeMember(req.params.id, res);
   if (!result[0]) {
     res.status(400).json({
