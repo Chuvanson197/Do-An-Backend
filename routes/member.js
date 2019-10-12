@@ -23,11 +23,11 @@ router.post("/", cors(corsOptions), async function(req, res, next) {
   let result = null;
   if (member) {
     res.json({
-      message: "Add new member information successful"
+      message: "members.addMember.message.success"
     });
   } else {
     res.status(400).json({
-      message: "Add new member information successful"
+      message: "members.addMember.message.error"
     });
   }
 });
@@ -41,11 +41,11 @@ router.post("/remove/:staff_code", cors(corsOptions), async function(
   const result = await Member.remove(req.params.staff_code, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Remove member information failure"
+      message: "members.removeMember.message.error"
     });
   } else {
     res.json({
-      message: "Remove member information successful"
+      message: "members.removeMember.message.success"
     });
   }
 });
@@ -55,11 +55,11 @@ router.put("/:staff_code", cors(corsOptions), async function(req, res, next) {
   const result = await Member.update(req.params.staff_code, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Update member information failure"
+      message: "members.updateMember.message.error"
     });
   } else {
     res.json({
-      message: "Update member information successful"
+      message: "members.updateMember.message.success"
     });
   }
 });

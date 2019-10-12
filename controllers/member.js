@@ -18,7 +18,7 @@ module.exports = {
       }
     }).catch(() =>
       res.status(400).json({
-        message: "Find member information failure"
+        message: "members.findMember.message.error"
       })
     );
   },
@@ -27,7 +27,7 @@ module.exports = {
       ...req.body
     }).catch(() => {
       res.status(400).json({
-        message: "Create new member failure"
+        message: "members.addMember.message.error"
       });
     });
   },
@@ -47,7 +47,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Update member information failure"
+        message: "members.updateMember.message.error"
       })
     ));
   },
@@ -63,7 +63,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Remove member information failure"
+        message: "members.removeMember.message.error"
       })
     ));
   }

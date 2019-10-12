@@ -17,7 +17,7 @@ module.exports = {
       }
     }).catch(() =>
       res.status(400).json({
-        message: "Find customer information failure"
+        message: "customers.findCustomer.message.error"
       })
     );
   },
@@ -26,7 +26,7 @@ module.exports = {
       ...req.body
     }).catch(() =>
       res.status(400).json({
-        message: "Create new customer failure"
+        message: "customers.addCustomer.message.error"
       })
     );
   },
@@ -47,7 +47,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Update customer information failure"
+        message: "customers.updateCustomer.message.error"
       })
     ));
   },
@@ -63,7 +63,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Remove customer information failure"
+        message: "customers.removeCustomer.message.error"
       })
     ));
   }

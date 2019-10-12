@@ -22,11 +22,11 @@ router.post("/", cors(corsOptions), async function(req, res, next) {
   const customer = await Customer.create(req, res);
   if (customer) {
     res.json({
-      message: "Create new customer successful"
+      message: "customers.addCustomer.message.success"
     });
   } else {
-    res.json({
-      message: "Create new customer failure"
+    res.status(400).json({
+      message: "customers.addCustomer.message.error"
     });
   }
 });
@@ -36,11 +36,11 @@ router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Customer.remove(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Remove customer information failure"
+      message: "customers.removeCustomer.message.error"
     });
   } else {
     res.json({
-      message: "Remove customer information successful"
+      message: "customers.removeCustomer.message.success"
     });
   }
 });
@@ -50,11 +50,11 @@ router.put("/:id", cors(corsOptions), async function(req, res, next) {
   const result = await Customer.update(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
-      message: "Update customer information failure"
+      message: "customers.updateCustomer.message.error"
     });
   } else {
     res.json({
-      message: "Update customer information successful"
+      message: "customers.updateCustomer.message.success"
     });
   }
 });
