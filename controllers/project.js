@@ -199,7 +199,8 @@ module.exports = {
     return (result = ProjectMember.update(
       {
         hidden: 1,
-        time_out: moment().format("YYYY-MM-DDTHH:mm:ss")
+        time_out: moment().format("YYYY-MM-DDTHH:mm:ss"),
+        member_status: "leave"
       },
       {
         where: {
