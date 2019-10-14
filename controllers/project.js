@@ -44,7 +44,7 @@ module.exports = {
       ]
     }).catch(() =>
       res.status(400).json({
-        message: "Find customer information failure"
+        message: "projects.getProjects.message.error"
       })
     );
   },
@@ -57,9 +57,7 @@ module.exports = {
         ? moment(project.end_time).format("YYYY-MM-DDTHH:mm:ss")
         : null
     }).catch(() =>
-      res
-        .status(400)
-        .json({ message: "Create new project information failure" })
+      res.status(400).json({ message: "projects.createProject.message.error" })
     );
   },
   update(id, req, res) {
@@ -82,7 +80,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Update project information failure"
+        message: "projects.updateProject.message.error"
       })
     ));
   },
@@ -98,7 +96,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Remove project information failure"
+        message: "projects.removeProject.message.error"
       })
     ));
   },
@@ -120,12 +118,15 @@ module.exports = {
         {
           model: Member,
           as: "member_detail",
-          attributes: ["staff_code", "full_name", "phone_number", "email"]
+          attributes: ["staff_code", "full_name", "phone_number", "email"],
+          where: {
+            hidden: 0
+          }
         }
       ]
     }).catch(() =>
       res.status(400).json({
-        message: "Get members list failure"
+        message: "projects.getMembersList.message.error"
       })
     );
   },
@@ -144,7 +145,7 @@ module.exports = {
       where: {
         project_id,
         hidden: 0,
-        time_in:[time_in, time_out],
+        time_in: [time_in, time_out],
         time_out: [time_in, time_out]
       },
       include: [
@@ -155,7 +156,7 @@ module.exports = {
         }
       ]
     }).catch(() =>
-      res.status(400).json({ message: "Get members list failure" })
+      res.status(400).json({ message: "projects.getMembersList.message.error" })
     );
   },
   addMember(req, res) {
@@ -166,7 +167,9 @@ module.exports = {
         ? moment(req.body.time_out).format("YYYY-MM-DDTHH:mm:ss")
         : null
     }).catch(() =>
-      res.status(400).json({ message: "Add member into project failure" })
+      res
+        .status(400)
+        .json({ message: "projects.addMemberIntoProject.message.error" })
     );
   },
   updateMemberJoined(id, req, res) {
@@ -188,7 +191,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Update member information in project failure"
+        message: "projects.updateMemberIntoProject.message.error"
       })
     ));
   },
@@ -204,7 +207,7 @@ module.exports = {
       }
     ).catch(() =>
       res.status(400).json({
-        message: "Remove member from project failure"
+        message: "projects.removeMemberFromProject.message.error"
       })
     ));
   }

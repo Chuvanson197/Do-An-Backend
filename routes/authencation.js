@@ -16,7 +16,7 @@ router.post("/", cors(corsOptions), function(req, res, next) {
       function(error, httpResponse, body) {
         if (error) {
           res.status(401).json({
-            msg: "Unauthorized, access denied"
+            message: "authencation.google.unauthorized"
           });
         } else {
           res.json(JSON.parse(body));
@@ -25,7 +25,7 @@ router.post("/", cors(corsOptions), function(req, res, next) {
     );
   } else {
     res.status(401).json({
-      msg: "Invalid google access token!"
+      message: "authencation.google.access.invalid"
     });
   }
 });
