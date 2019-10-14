@@ -198,7 +198,8 @@ module.exports = {
   removeMember(id, res) {
     return (result = ProjectMember.update(
       {
-        hidden: 1
+        hidden: 1,
+        time_out: moment().format("YYYY-MM-DDTHH:mm:ss")
       },
       {
         where: {
