@@ -85,7 +85,7 @@ router.post("/membersList/:project_id", cors(corsOptions), async function(
         return {
           ...member.dataValues,
           time_in: moment(member.time_in).format("x"),
-          time_out: moment(member.time_out).format("x")
+          time_out: member.time_out ? moment(member.time_out).format("x") : null
         };
       });
     }

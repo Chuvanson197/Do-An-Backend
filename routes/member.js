@@ -20,7 +20,6 @@ router.get("/:staff_code", cors(corsOptions), async function(req, res, next) {
 /* POST add new member api */
 router.post("/", cors(corsOptions), async function(req, res, next) {
   const member = await Member.create(req, res);
-  let result = null;
   if (member) {
     res.json({
       message: "members.addMember.message.success"

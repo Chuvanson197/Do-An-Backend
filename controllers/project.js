@@ -1,4 +1,7 @@
 var moment = require("moment");
+var Sequelize = require("sequelize");
+
+const Op = Sequelize.Op;
 
 const Project = require("../models").Project;
 const Customer = require("../models").Customer;
@@ -39,7 +42,14 @@ module.exports = {
         {
           model: Customer,
           as: "customer",
-          attributes: ["id", "name", "phone_number", "email", "address"]
+          attributes: [
+            "id",
+            "name",
+            "phone_number",
+            "email",
+            "address",
+            "hidden"
+          ]
         }
       ]
     }).catch(() =>
@@ -124,11 +134,13 @@ module.exports = {
           }
         }
       ]
-    }).catch(() =>
+    }).catch(error => {
+      console.log(error);
+
       res.status(400).json({
         message: "projects.getMembersList.message.error"
-      })
-    );
+      });
+    });
   },
   getMembersListByTime(project_id, req, res) {
     const time_in = moment(req.body.time_in).format("YYYY-MM-DDTHH:mm:ss");
@@ -144,15 +156,18 @@ module.exports = {
       ],
       where: {
         project_id,
-        hidden: 0,
-        time_in: [time_in, time_out],
-        time_out: [time_in, time_out]
+        time_in: {
+          [Op.between]: [time_in, time_out]
+        }
       },
       include: [
         {
           model: Member,
           as: "member_detail",
-          attributes: ["staff_code", "full_name", "phone_number", "email"]
+          attributes: ["staff_code", "full_name", "phone_number", "email"],
+          where: {
+            hidden: 0
+          }
         }
       ]
     }).catch(() =>

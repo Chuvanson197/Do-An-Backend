@@ -24,11 +24,18 @@ module.exports = {
   },
   create(req, res) {
     return Member.create({
-      ...req.body
-    }).catch(() => {
-      res.status(400).json({
-        message: "members.addMember.message.error"
-      });
+      ...req.body,
+      staff_code: req.body.staff_code.toUpperCase()
+    }).catch(error => {
+      if (error.original.code === "ER_DUP_ENTRY") {
+        res.status(400).json({
+          message: "members.addMember.message.staff_code.exits"
+        });
+      } else {
+        res.status(400).json({
+          message: "members.addMember.message.error"
+        });
+      }
     });
   },
   update(staff_code, req, res) {

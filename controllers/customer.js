@@ -2,7 +2,7 @@ const Customer = require("../models").Customer;
 module.exports = {
   findAll() {
     return Customer.findAll({
-      attributes: ["id", "name", "phone_number", "email", "address"],
+      attributes: ["id", "name", "phone_number", "email", "address", "hidden"],
       where: {
         hidden: 0
       }
@@ -17,7 +17,7 @@ module.exports = {
       }
     }).catch(() =>
       res.status(400).json({
-        message: "customers.findCustomer.message.error"
+        message: "customers.getCustomer.message.error"
       })
     );
   },
@@ -26,7 +26,7 @@ module.exports = {
       ...req.body
     }).catch(() =>
       res.status(400).json({
-        message: "customers.addCustomer.message.error"
+        message: "customers.createCustomer.message.error"
       })
     );
   },

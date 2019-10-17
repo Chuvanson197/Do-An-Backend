@@ -22,11 +22,11 @@ router.post("/", cors(corsOptions), async function(req, res, next) {
   const customer = await Customer.create(req, res);
   if (customer) {
     res.json({
-      message: "customers.addCustomer.message.success"
+      message: "customers.createCustomer.message.success"
     });
   } else {
     res.status(400).json({
-      message: "customers.addCustomer.message.error"
+      message: "customers.createCustomer.message.error"
     });
   }
 });
