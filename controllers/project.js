@@ -1,4 +1,7 @@
 var moment = require("moment");
+var Sequelize = require('sequelize');
+
+const Op = Sequelize.Op;
 
 const Project = require("../models").Project;
 const Customer = require("../models").Customer;
@@ -144,9 +147,9 @@ module.exports = {
       ],
       where: {
         project_id,
-        hidden: 0,
-        time_in: [time_in, time_out],
-        time_out: [time_in, time_out]
+        time_in: {
+          [Op.between]: [time_in, time_out]
+        }
       },
       include: [
         {
