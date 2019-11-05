@@ -24,8 +24,28 @@ module.exports = (sequelize, DataTypes) => {
       },
       email: {
         allowNull: false,
+        unique: true,
         type: DataTypes.STRING(100)
       },
+      permission: {
+        allowNull: false,
+        type: DataTypes.STRING(50),
+        defaultValue: "view"
+      },
+      type: {
+        allowNull: false,
+        type: DataTypes.STRING(50),
+        defaultValue: "normal"
+      },
+      access_token: {
+        unique: true,
+        type: DataTypes.TEXT
+      },
+      refresh_token: {
+        unique: true,
+        type: DataTypes.TEXT
+      },
+      last_auth: DataTypes.DATE,
       hidden: {
         type: DataTypes.BOOLEAN,
         defaultValue: 0

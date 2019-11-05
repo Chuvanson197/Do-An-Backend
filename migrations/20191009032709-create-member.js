@@ -25,6 +25,25 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(100)
       },
+      permission: {
+        allowNull: false,
+        type: Sequelize.STRING(50),
+        defaultValue: "view"
+      },
+      type: {
+        allowNull: false,
+        type: Sequelize.STRING(50),
+        defaultValue: "normal"
+      },
+      access_token: {
+        unique: true,
+        type: Sequelize.TEXT
+      },
+      refresh_token: {
+        unique: true,
+        type: Sequelize.TEXT
+      },
+      last_auth: Sequelize.DATE,
       hidden: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0

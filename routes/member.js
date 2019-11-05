@@ -4,9 +4,14 @@ var cors = require("cors");
 
 const corsOptions = require("../config/corsOptions");
 var Member = require("../controllers").member;
+const authencation = require("../utils/authencation");
 
 /* GET get all members api */
-router.get("/", cors(corsOptions), async function(req, res, next) {
+router.get("/", cors(corsOptions), authencation.isAuthenticated, async function(
+  req,
+  res,
+  next
+) {
   const members = await Member.findAll();
   res.json(members);
 });
