@@ -9,6 +9,28 @@ module.exports = {
       }
     });
   },
+  findById(id) {
+    return Member.findOne({
+      attributes: ["id", "email", "last_auth", "access_token", "refresh_token"],
+      where: {
+        id,
+        hidden: 0
+      }
+    }).catch(() => {
+      return null;
+    });
+  },
+  findByEmail(email) {
+    return Member.findOne({
+      attributes: ["id"],
+      where: {
+        email,
+        hidden: 0
+      }
+    }).catch(() => {
+      return null;
+    });
+  },
   findByStaffCode(staff_code, res) {
     return Member.findOne({
       attributes: ["staff_code", "full_name", "phone_number", "email"],
@@ -57,6 +79,23 @@ module.exports = {
         message: "members.updateMember.message.error"
       })
     ));
+  },
+  savingToken(email, data, res) {
+    return Member.update(
+      {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        last_auth: data.last_auth
+      },
+      {
+        where: {
+          email,
+          hidden: 0
+        }
+      }
+    ).catch(error => {
+      res.send(error);
+    });
   },
   remove(staff_code, req, res) {
     return (result = Member.update(
