@@ -47,8 +47,9 @@ router.post("/login", cors(corsOptions), function(req, res, next) {
               });
             }
             let userData = JSON.parse(user);
-            const memberId = await Member.findByEmail(userData.email);
-            if (!memberId.dataValues) {
+            const memberData = await Member.findByEmail(userData.email);
+            console.log(memberData);
+            if (!memberData || !memberData.dataValues) {
               res.status(401).json({
                 message: "Unauthorized user!"
               });
