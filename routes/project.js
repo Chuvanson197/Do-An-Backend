@@ -1,13 +1,11 @@
 var express = require("express");
 var router = express.Router();
 var moment = require("moment");
-var cors = require("cors");
 
-const corsOptions = require("../config/corsOptions");
 var Project = require("../controllers").project;
 
 /* GET get all projects api */
-router.get("/", cors(corsOptions), async function(req, res, next) {
+router.get("/", async function(req, res) {
   const projects = await Project.findAll();
   let result = null;
   if (projects) {
@@ -23,7 +21,7 @@ router.get("/", cors(corsOptions), async function(req, res, next) {
 });
 
 /* GET get project by project id api */
-router.get("/:id", cors(corsOptions), async function(req, res, next) {
+router.get("/:id", async function(req, res) {
   const projects = await Project.findById(req.params.id);
   let result = null;
   if (projects) {
@@ -38,11 +36,7 @@ router.get("/:id", cors(corsOptions), async function(req, res, next) {
 });
 
 /* GET get all members in project api */
-router.get("/membersList/:project_id", cors(corsOptions), async function(
-  req,
-  res,
-  next
-) {
+router.get("/membersList/:project_id", async function(req, res) {
   const membersList = await Project.getMembersList(req.params.project_id, res);
   let result = {
     list: [],
@@ -64,11 +58,7 @@ router.get("/membersList/:project_id", cors(corsOptions), async function(
 });
 
 /*POST get all members in project by time_in and time_out */
-router.post("/membersList/:project_id", cors(corsOptions), async function(
-  req,
-  res,
-  next
-) {
+router.post("/membersList/:project_id", async function(req, res) {
   if (!req.body.time_in && !req.body.time_out) {
     res.status(400).json({
       message: "projects.membersList.message.timeError"
@@ -94,7 +84,7 @@ router.post("/membersList/:project_id", cors(corsOptions), async function(
 });
 
 /* POST add new project api */
-router.post("/", cors(corsOptions), async function(req, res, next) {
+router.post("/", async function(req, res) {
   const project = await Project.create(req, res);
   if (project) {
     res.json({
@@ -108,7 +98,7 @@ router.post("/", cors(corsOptions), async function(req, res, next) {
 });
 
 /* POST remove project api */
-router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
+router.post("/remove/:id", async function(req, res) {
   const result = await Project.remove(req.params.id, res);
   if (!result[0]) {
     res.status(400).json({
@@ -122,7 +112,7 @@ router.post("/remove/:id", cors(corsOptions), async function(req, res, next) {
 });
 
 /* PUT update project api */
-router.put("/:id", cors(corsOptions), async function(req, res, next) {
+router.put("/:id", async function(req, res) {
   const result = await Project.update(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
@@ -136,7 +126,7 @@ router.put("/:id", cors(corsOptions), async function(req, res, next) {
 });
 
 /* POST add member into project api */
-router.post("/membersList", cors(corsOptions), async function(req, res, next) {
+router.post("/membersList", async function(req, res) {
   const result = await Project.addMember(req, res);
   if (result) {
     res.json({
@@ -150,11 +140,7 @@ router.post("/membersList", cors(corsOptions), async function(req, res, next) {
 });
 
 /* PUT edit member in project api */
-router.put("/membersList/:id", cors(corsOptions), async function(
-  req,
-  res,
-  next
-) {
+router.put("/membersList/:id", async function(req, res) {
   const result = await Project.updateMemberJoined(req.params.id, req, res);
   if (!result[0]) {
     res.status(400).json({
@@ -168,11 +154,7 @@ router.put("/membersList/:id", cors(corsOptions), async function(
 });
 
 /* PUT remove member in project api */
-router.post("/membersList/remove/:id", cors(corsOptions), async function(
-  req,
-  res,
-  next
-) {
+router.post("/membersList/remove/:id", async function(req, res) {
   const result = await Project.removeMember(req.params.id, res);
   if (!result[0]) {
     res.status(400).json({
