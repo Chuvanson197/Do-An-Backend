@@ -2,28 +2,23 @@ var express = require("express");
 var router = express.Router();
 var cors = require("cors");
 
-const corsOptions = require("../config/corsOptions");
 var Member = require("../controllers").member;
 const authencation = require("../utils/authencation");
 
 /* GET get all members api */
-router.get("/", cors(corsOptions), authencation.isAuthenticated, async function(
-  req,
-  res,
-  next
-) {
+router.get("/", authencation.isAuthenticated, async function(req, res, next) {
   const members = await Member.findAll();
   res.json(members);
 });
 
 /* GET get member by staff code api */
-router.get("/:staff_code", cors(corsOptions), async function(req, res, next) {
+router.get("/:staff_code", async function(req, res, next) {
   const member = await Member.findByStaffCode(req.params.staff_code, res);
   res.json(member);
 });
 
 /* POST add new member api */
-router.post("/", cors(corsOptions), async function(req, res, next) {
+router.post("/", async function(req, res, next) {
   const member = await Member.create(req, res);
   if (member) {
     res.json({
@@ -37,11 +32,7 @@ router.post("/", cors(corsOptions), async function(req, res, next) {
 });
 
 /* POST remove member api */
-router.post("/remove/:staff_code", cors(corsOptions), async function(
-  req,
-  res,
-  next
-) {
+router.post("/remove/:staff_code", async function(req, res, next) {
   const result = await Member.remove(req.params.staff_code, res);
   if (!result[0]) {
     res.status(400).json({
@@ -55,7 +46,7 @@ router.post("/remove/:staff_code", cors(corsOptions), async function(
 });
 
 /* PUT update member api */
-router.put("/:staff_code", cors(corsOptions), async function(req, res, next) {
+router.put("/:staff_code", async function(req, res, next) {
   const result = await Member.update(req.params.staff_code, req, res);
   if (!result[0]) {
     res.status(400).json({

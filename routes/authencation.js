@@ -11,7 +11,7 @@ const corsOptions = require("../config/corsOptions");
 var Member = require("../controllers").member;
 
 /* POST login api */
-router.post("/login", cors(corsOptions), function(req, res, next) {
+router.post("/login", function(req, res, next) {
   if (!req.body.accessCode) {
     res.status(401).json({
       message: "Access code is required"
@@ -29,6 +29,7 @@ router.post("/login", cors(corsOptions), function(req, res, next) {
       }
     },
     function(error, httpResponse, body) {
+      console.log(error, httpResponse, body);
       if (error || httpResponse.statusCode === 400) {
         res.status(401).json({ message: "Unauthorized user!" });
       } else {

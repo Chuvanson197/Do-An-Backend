@@ -24,11 +24,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    optionsSuccessStatus: 200,
+    credentials: true
+  })
+);
 
-app.use("/api/customers", customerRouter);
+app.use(
+  "/api/customers",
+  (req, res, next) => {
+    console.log("hai chung minh la cua chung minh");
+    next();
+  },
+  customerRouter
+);
 app.use("/api/auth", authRouter);
-app.use("/api/projects", projectRouter);
+app.use(
+  "/api/projects",
+  (req, res, next) => {
+    console.log(req.headers);
+    next();
+  },
+  projectRouter
+);
 app.use("/api/members", memberRouter);
 
 // catch 404 and forward to error handler
