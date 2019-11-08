@@ -1,17 +1,15 @@
 var express = require("express");
 var router = express.Router();
 var request = require("request");
-var cors = require("cors");
 var jwt = require("jsonwebtoken");
 const moment = require("moment");
 
 var config = require("../config/authConfig");
 
-const corsOptions = require("../config/corsOptions");
 var Member = require("../controllers").member;
 
 /* POST login api */
-router.post("/login", function(req, res, next) {
+router.post("/login", function(req, res) {
   if (!req.body.accessCode) {
     res.status(401).json({
       message: "Access code is required"
@@ -29,7 +27,6 @@ router.post("/login", function(req, res, next) {
       }
     },
     function(error, httpResponse, body) {
-      console.log(error, httpResponse, body);
       if (error || httpResponse.statusCode === 400) {
         res.status(401).json({ message: "Unauthorized user!" });
       } else {

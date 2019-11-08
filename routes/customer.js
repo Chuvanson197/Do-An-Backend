@@ -1,25 +1,22 @@
 var express = require("express");
 var router = express.Router();
-var cors = require("cors");
 
-const corsOptions = require("../config/corsOptions");
 var Customer = require("../controllers").customer;
 
 /* GET get all customers api */
-router.get("/", async function(req, res, next) {
+router.get("/", async function(req, res) {
   const customers = await Customer.findAll();
   res.json(customers);
 });
 
 /* GET get customer by customer id api */
-router.get("/:id", async function(req, res, next) {
+router.get("/:id", async function(req, res) {
   const customer = await Customer.findById(req.params.id, res);
   res.json(customer);
 });
 
 /* POST add new customer api */
-router.post("/", async function(req, res, next) {
-  console.log(req.headers);
+router.post("/", async function(req, res) {
   const customer = await Customer.create(req, res);
   if (customer) {
     res.json({

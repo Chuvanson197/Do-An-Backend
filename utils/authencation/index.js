@@ -1,9 +1,9 @@
-var Member = require("../../controllers").member;
-var config = require("../../config/authConfig");
-var jwt = require("jsonwebtoken");
-var moment = require("moment");
+const Member = require("../../controllers").member;
+const config = require("../../config/authConfig");
+const jwt = require("jsonwebtoken");
+const moment = require("moment");
 
-var refreshToken = require("./refresh");
+const refreshToken = require("./refresh");
 
 exports.isAuthenticated = function(req, res, next) {
   if (req.headers && req.headers.authorization) {
