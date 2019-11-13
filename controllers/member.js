@@ -22,13 +22,29 @@ module.exports = {
   },
   findByEmail(email) {
     return Member.findOne({
-      attributes: ["id"],
+      attributes: [
+        "id",
+        "refresh_token",
+        "staff_code",
+        "full_name",
+        "phone_number",
+        "email",
+        "type"
+      ],
       where: {
         email,
         hidden: 0
       }
     }).catch(() => {
       return null;
+    });
+  },
+  findByToken: token => {
+    return Member.findOne({
+      where: {
+        access_token: token,
+        hidden: 0
+      }
     });
   },
   findByStaffCode(staff_code, res) {
@@ -80,11 +96,25 @@ module.exports = {
       })
     ));
   },
+
+  addNewMember: async (user, authToken, expires_in, last_auth) => {
+    return await Member.create({
+      full_name: user.name,
+      email: user.email,
+      staff_code: `${Math.random()}`,
+      phone_number: `${Math.random()}`,
+      access_token: authToken.access_token,
+      refresh_token: authToken.refresh_token,
+      expires_in,
+      last_auth
+    });
+  },
   savingToken(email, data, res) {
     return Member.update(
       {
         access_token: data.access_token,
         refresh_token: data.refresh_token,
+        expires_in: data.expires_in,
         last_auth: data.last_auth
       },
       {

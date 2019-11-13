@@ -14,6 +14,7 @@ const authRouter = require("./routes/authencation");
 const customerRouter = require("./routes/customer");
 const projectRouter = require("./routes/project");
 const memberRouter = require("./routes/member");
+const authencation = require("./middleware/authentication");
 
 const app = express();
 
@@ -33,9 +34,11 @@ app.use(
     credentials: true
   })
 );
+app.use("/api/auth", authRouter);
+
+app.use(authencation);
 
 app.use("/api/customers", customerRouter);
-app.use("/api/auth", authRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/members", memberRouter);
 
