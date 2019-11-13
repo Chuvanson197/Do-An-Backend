@@ -5,6 +5,7 @@ var jwt = require("jsonwebtoken");
 const moment = require("moment");
 
 var config = require("../config/authConfig");
+const Env = require("../utils/environment");
 
 var Member = require("../controllers").member;
 
@@ -19,7 +20,7 @@ router.post("/login", function(req, res) {
   }
   request.post(
     {
-      url: "http://auth.impl.vn/oauth/token",
+      url: Env.OAuth,
       form: {
         grant_type: config.grant_type,
         client_id: config.client_id,
@@ -36,7 +37,7 @@ router.post("/login", function(req, res) {
 
         request(
           {
-            url: "http://auth.impl.vn/api/user-info",
+            url: Env,
             headers: {
               Authorization: `${authData.token_type} ${authData.access_token}`
             }
@@ -98,11 +99,11 @@ router.get("/refreshLogin", (req, res) => {
     jwt.verify(tokenCookie, config.jwtSecret, async (err, decoded) => {
       if (err && err.name === "JsonWebTokenError") {
         res.json({ statusCode: 400 });
-      } else {
+      } else if (err && err.name === "TokenExpiredError") {
         let memeberWithEmail = await Member.findByEmail(decoded.email);
         request.post(
           {
-            url: "http://auth.impl.vn/oauth/token",
+            url: Env.OAuth,
             form: {
               grant_type: "refresh_token",
               client_id: config.client_id,
@@ -120,7 +121,7 @@ router.get("/refreshLogin", (req, res) => {
                 { ...memeberWithEmail.dataValues },
                 config.jwtSecret,
                 {
-                  expiresIn: "1h"
+                  expiresIn: config.expiresIn
                 }
               );
 
@@ -140,6 +141,8 @@ router.get("/refreshLogin", (req, res) => {
             }
           }
         );
+      } else {
+        res.json({ statusCode: 1000, token: cookie });
       }
     });
   } else {
@@ -156,7 +159,7 @@ router.get("/refreshToken", (req, res) => {
         let refresh_token = await Member.findByToken(tokenCookie);
         request.post(
           {
-            url: "http://auth.impl.vn/oauth/token",
+            url: Env.OAuth,
             form: {
               grant_type: "refresh_token",
               client_id: config.client_id,
@@ -174,7 +177,7 @@ router.get("/refreshToken", (req, res) => {
                 { ...refresh_token.dataValues },
                 config.jwtSecret,
                 {
-                  expiresIn: "1h"
+                  expiresIn: config.expiresIn
                 }
               );
 
