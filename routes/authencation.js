@@ -12,7 +12,6 @@ var Member = require("../controllers").member;
 /* POST login api */
 router.post("/login", function(req, res) {
   let { accessCode } = req.body;
-
   if (!accessCode) {
     res.status(401).json({
       message: "Access code is required"
@@ -37,7 +36,7 @@ router.post("/login", function(req, res) {
 
         request(
           {
-            url: Env,
+            url: Env.OAuthInfo,
             headers: {
               Authorization: `${authData.token_type} ${authData.access_token}`
             }
@@ -52,7 +51,7 @@ router.post("/login", function(req, res) {
             let token = jwt.sign(
               { ...userData, ...authData },
               config.jwtSecret,
-              { expiresIn: "1h" }
+              { expiresIn: config.expiresIn }
             );
 
             const memberId = await Member.findByEmail(userData.email);

@@ -6,7 +6,6 @@ const authencation = require("../utils/authencation");
 
 /* GET get all members api */
 router.get("/", async function(req, res) {
-  console.log("log");
   const members = await Member.findAll();
   res.json(members);
 });

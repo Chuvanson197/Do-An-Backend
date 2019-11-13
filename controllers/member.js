@@ -3,7 +3,6 @@ const Member = require("../models").Member;
 module.exports = {
   findAll() {
     return Member.findAll({
-      attributes: ["staff_code", "full_name", "phone_number", "email"],
       where: {
         hidden: 0
       }
@@ -82,7 +81,9 @@ module.exports = {
       {
         full_name: member.full_name,
         phone_number: member.phone_number,
-        email: member.email
+        email: member.email,
+        type: member.role,
+        permission: member.permission
       },
       {
         where: {
