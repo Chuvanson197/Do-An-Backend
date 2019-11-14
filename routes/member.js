@@ -5,7 +5,7 @@ var Member = require("../controllers").member;
 const authencation = require("../utils/authencation");
 
 /* GET get all members api */
-router.get("/", authencation.isAuthenticated, async function(req, res) {
+router.get("/", async function(req, res) {
   const members = await Member.findAll();
   res.json(members);
 });

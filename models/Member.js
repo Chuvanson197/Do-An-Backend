@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         type: DataTypes.TEXT
       },
+      expires_in: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
       last_auth: DataTypes.DATE,
       hidden: {
         type: DataTypes.BOOLEAN,

@@ -34,6 +34,7 @@ create table if not exists `members`(
     `type` varchar(50) not null default 'normal',
     `access_token` text,
     `refresh_token` text,
+    `expires_in` timestamp not null,
     `last_auth` timestamp,
 	`hidden` boolean default false
 ) engine = InnoDB;
