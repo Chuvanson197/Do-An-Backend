@@ -53,7 +53,7 @@ create table if not exists `project_member` (
 
 alter table `project_member` add constraint fk_projectMember_projects foreign key(`project_id`) references `projects`(`id`);
 alter table `project_member` add constraint fk_projectMember_members foreign key(`staff_code`) references `members`(`staff_code`);
-alter user 'root'@'localhost' identified with mysql_native_password BY '19022018';
+
 
 -- drop database `project_management`;
 
