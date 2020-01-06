@@ -1,8 +1,16 @@
-const Member = require("../models").Member;
+const Member = require("../models/Member");
 
 module.exports = {
   findAll() {
     return Member.findAll({
+      attributes: [
+        "staff_code",
+        "full_name",
+        "phone_number",
+        "email",
+        "type",
+        "permission"
+      ],
       where: {
         hidden: 0
       }
@@ -48,7 +56,14 @@ module.exports = {
   },
   findByStaffCode(staff_code, res) {
     return Member.findOne({
-      attributes: ["staff_code", "full_name", "phone_number", "email"],
+      attributes: [
+        "staff_code",
+        "full_name",
+        "phone_number",
+        "email",
+        "type",
+        "permission"
+      ],
       where: {
         staff_code,
         hidden: 0
@@ -82,7 +97,7 @@ module.exports = {
         full_name: member.full_name,
         phone_number: member.phone_number,
         email: member.email,
-        type: member.role,
+        type: member.type,
         permission: member.permission
       },
       {
@@ -100,8 +115,8 @@ module.exports = {
 
   addNewMember: async (user, authToken, expires_in, last_auth) => {
     return await Member.create({
-      full_name: user.name,
-      email: user.email,
+      full_name: user["name"] || "",
+      email: user["email"],
       staff_code: `${Math.random()}`,
       phone_number: `${Math.random()}`,
       access_token: authToken.access_token,

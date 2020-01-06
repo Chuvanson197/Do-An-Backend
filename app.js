@@ -4,7 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-
 const ENV = require("./utils/environment");
 
 //DB connection
@@ -57,5 +56,6 @@ app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render("error");
 });
+
 
 module.exports = app;

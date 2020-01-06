@@ -1,8 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-var Member = require("../controllers").member;
-const authencation = require("../utils/authencation");
+var Member = require("../controllers/member");
 
 /* GET get all members api */
 router.get("/", async function(req, res) {

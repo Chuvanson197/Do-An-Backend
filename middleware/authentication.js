@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/authConfig");
+const cookie = require("cookie");
 
 const authentication = (req, res, next) => {
-  let cookie = req.headers.cookie;
-  if (cookie) {
-    let tokenCookie = cookie.split("=")[1];
-    jwt.verify(tokenCookie, config.jwtSecret, async (err, decoded) => {
+  if (req.headers.cookie && cookie.parse(req.headers.cookie)["access-token"]) {
+    let token = cookie.parse(req.headers.cookie)["access-token"];
+    jwt.verify(token, config.jwtSecret, async (err, decoded) => {
       if (err) {
         res.status(400).json(err);
       } else {

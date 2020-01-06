@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-var Customer = require("../controllers").customer;
+var Customer = require("../controllers/customer");
 
 /* GET get all customers api */
 router.get("/", async function(req, res) {

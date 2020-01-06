@@ -1,4 +1,4 @@
-const Customer = require("../models").Customer;
+const Customer = require("../models/Customer");
 module.exports = {
   findAll() {
     return Customer.findAll({
@@ -37,7 +37,7 @@ module.exports = {
         name: customer.name,
         phone_number: customer.phone_number,
         email: customer.email,
-        address: customer.address,
+        address: customer.address
       },
       {
         where: {

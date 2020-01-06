@@ -3,11 +3,12 @@ var router = express.Router();
 var request = require("request");
 var jwt = require("jsonwebtoken");
 const moment = require("moment");
+const cookie = require("cookie");
 
 var config = require("../config/authConfig");
 const Env = require("../utils/environment");
 
-var Member = require("../controllers").member;
+var Member = require("../controllers/member");
 
 /* POST login api */
 router.post("/login", function(req, res) {
@@ -33,7 +34,6 @@ router.post("/login", function(req, res) {
         res.status(401).json({ message: "Unauthorized user!" });
       } else {
         let authData = JSON.parse(body);
-
         request(
           {
             url: Env.OAuthInfo,
@@ -46,6 +46,7 @@ router.post("/login", function(req, res) {
               res.status(401).json({
                 message: "Unauthorized user!"
               });
+              redirect_uri;
             }
             let userData = JSON.parse(user);
             let token = jwt.sign(
@@ -92,10 +93,9 @@ router.post("/login", function(req, res) {
 });
 
 router.get("/refreshLogin", (req, res) => {
-  let cookie = req.headers.cookie;
-  if (cookie) {
-    let tokenCookie = cookie.split("=")[1];
-    jwt.verify(tokenCookie, config.jwtSecret, async (err, decoded) => {
+  if (req.headers.cookie && cookie.parse(req.headers.cookie)["access-token"]) {
+    let token = cookie.parse(req.headers.cookie)["access-token"];
+    jwt.verify(token, config.jwtSecret, async (err, decoded) => {
       if (err && err.name === "JsonWebTokenError") {
         res.json({ statusCode: 400 });
       } else if (err && err.name === "TokenExpiredError") {
@@ -150,12 +150,11 @@ router.get("/refreshLogin", (req, res) => {
 });
 
 router.get("/refreshToken", (req, res) => {
-  let cookie = req.headers.cookie;
-  if (cookie) {
-    let tokenCookie = cookie.split("=")[1];
-    jwt.verify(tokenCookie, config.jwtSecret, async (err, decoded) => {
+  if (req.headers.cookie && cookie.parse(req.headers.cookie)["access-token"]) {
+    let token = cookie.parse(req.headers.cookie)["access-token"];
+    jwt.verify(token, config.jwtSecret, async (err, decoded) => {
       if (err && err.name === "TokenExpiredError") {
-        let refresh_token = await Member.findByToken(tokenCookie);
+        let refresh_token = await Member.findByToken(token);
         request.post(
           {
             url: Env.OAuth,
