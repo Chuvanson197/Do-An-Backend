@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var moment = require("moment");
 
-var Project = require("../controllers").project;
+var Project = require("../controllers/project");
 
 /* GET get all projects api */
 router.get("/", async function(req, res) {

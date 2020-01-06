@@ -1,21 +1,21 @@
 {
   "development": {
-    "username": "root",
-    "password": "namnguyen691997",
+    "username": "soncv",
+    "password": "Son123456",
     "database": "project_management",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": "19022018",
+    "username": "soncv",
+    "password": "Son123456",
     "database": "project_management",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "19022018",
+    "username": "soncv",
+    "password": "Son123456",
     "database": "project_management",
     "host": "localhost",
     "dialect": "mysql"

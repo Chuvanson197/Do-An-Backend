@@ -3,10 +3,10 @@ var Sequelize = require("sequelize");
 
 const Op = Sequelize.Op;
 
-const Project = require("../models").Project;
-const Customer = require("../models").Customer;
-const ProjectMember = require("../models").ProjectMember;
-const Member = require("../models").Member;
+const Project = require("../models/Project");
+const Customer = require("../models/Customer");
+const ProjectMember = require("../models/ProjectMember");
+const Member = require("../models/Member");
 
 module.exports = {
   findAll() {

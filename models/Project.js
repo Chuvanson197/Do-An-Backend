@@ -1,48 +1,53 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
-  const Project = sequelize.define(
-    "Project",
-    {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      name: {
-        allowNull: false,
-        type: DataTypes.STRING(150)
-      },
-      status: {
-        allowNull: false,
-        type: DataTypes.STRING(100)
-      },
-      start_time: {
-        allowNull: false,
-        type: DataTypes.DATE
-      },
-      end_time: {
-        type: DataTypes.DATE
-      },
-      service_detail: {
-        type: DataTypes.JSON
-      },
-      hidden: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0
-      }
+const Sequelize = require("sequelize");
+const Customer = require("./Customer");
+
+const Project = sequelize.define(
+  "Project",
+  {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER
     },
-    {
-      timestamps: false,
-      underscored: true,
-      tableName: "projects"
+    customer_id: {
+      allowNull: false,
+      type: Sequelize.INTEGER
+    },
+    name: {
+      allowNull: false,
+      type: Sequelize.STRING(150)
+    },
+    status: {
+      allowNull: false,
+      type: Sequelize.STRING(100)
+    },
+    start_time: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    end_time: {
+      type: Sequelize.DATE
+    },
+    service_detail: {
+      type: Sequelize.JSON
+    },
+    hidden: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: 0
     }
-  );
-  Project.associate = function(models) {
-    Project.belongsTo(models.Customer, {
-      as: 'customer',
-      foreignKey: "customer_id"
-    });
-  };
-  return Project;
-};
+  },
+  {
+    timestamps: false,
+    underscored: true,
+    tableName: "projects"
+  }
+);
+
+Project.belongsTo(Customer, {
+  as: "customer",
+  foreignKey: "customer_id"
+});
+
+module.exports = Project;

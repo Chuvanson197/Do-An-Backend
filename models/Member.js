@@ -1,66 +1,66 @@
 "use strict";
-module.exports = (sequelize, DataTypes) => {
-  const Member = sequelize.define(
-    "Member",
-    {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      staff_code: {
-        allowNull: false,
-        unique: true,
-        type: DataTypes.STRING(50)
-      },
-      full_name: {
-        allowNull: false,
-        type: DataTypes.STRING(100)
-      },
-      phone_number: {
-        allowNull: false,
-        type: DataTypes.STRING(50)
-      },
-      email: {
-        allowNull: false,
-        unique: true,
-        type: DataTypes.STRING(100)
-      },
-      permission: {
-        allowNull: false,
-        type: DataTypes.STRING(50),
-        defaultValue: "view"
-      },
-      type: {
-        allowNull: false,
-        type: DataTypes.STRING(50),
-        defaultValue: "normal"
-      },
-      access_token: {
-        unique: true,
-        type: DataTypes.TEXT
-      },
-      refresh_token: {
-        unique: true,
-        type: DataTypes.TEXT
-      },
-      expires_in: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      last_auth: DataTypes.DATE,
-      hidden: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0
-      }
+const Sequelize = require("sequelize");
+
+const Member = sequelize.define(
+  "Member",
+  {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER
     },
-    {
-      timestamps: false,
-      underscored: true,
-      tableName: "members"
+    staff_code: {
+      allowNull: false,
+      unique: true,
+      type: Sequelize.STRING(50)
+    },
+    full_name: {
+      allowNull: false,
+      type: Sequelize.STRING(100)
+    },
+    phone_number: {
+      allowNull: false,
+      type: Sequelize.STRING(50)
+    },
+    email: {
+      allowNull: false,
+      unique: true,
+      type: Sequelize.STRING(100)
+    },
+    permission: {
+      allowNull: false,
+      type: Sequelize.STRING(50),
+      defaultValue: "view"
+    },
+    type: {
+      allowNull: false,
+      type: Sequelize.STRING(50),
+      defaultValue: "normal"
+    },
+    access_token: {
+      unique: true,
+      type: Sequelize.TEXT
+    },
+    refresh_token: {
+      unique: true,
+      type: Sequelize.TEXT
+    },
+    expires_in: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    last_auth: Sequelize.DATE,
+    hidden: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: 0
     }
-  );
-  Member.associate = function(models) {};
-  return Member;
-};
+  },
+  {
+    timestamps: false,
+    underscored: true,
+    tableName: "members"
+  }
+);
+
+module.exports = Member;
