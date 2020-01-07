@@ -32,8 +32,8 @@ create table if not exists `members`(
     `email` varchar(100) unique not null,
     `permission` varchar(50) not null default 'view',
     `type` varchar(50) not null default 'normal',
-    `access_token` text,
-    `refresh_token` text,
+    `access_token` varchar(300),
+    `refresh_token` varchar(300),
     `expires_in` timestamp not null,
     `last_auth` timestamp null default null,
 	`hidden` boolean default false

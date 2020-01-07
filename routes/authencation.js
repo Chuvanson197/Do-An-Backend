@@ -49,14 +49,23 @@ router.post("/login", function(req, res) {
               redirect_uri;
             }
             let userData = JSON.parse(user);
-            let token = jwt.sign(
-              { ...userData, ...authData },
-              config.jwtSecret,
-              { expiresIn: config.expiresIn }
-            );
-
+            let token = "";
             const memberId = await Member.findByEmail(userData.email);
             if (!memberId) {
+              token = jwt.sign(
+                {
+                  ...userData,
+                  ...authData,
+                  access_token: "",
+                  refresh_token: "",
+                  type: "normal"
+                },
+                config.jwtSecret,
+                {
+                  expiresIn: Env.expiresIn
+                }
+              );
+
               await Member.addNewMember(
                 userData,
                 { ...authData, access_token: token },
@@ -66,6 +75,13 @@ router.post("/login", function(req, res) {
                 moment().format("YYYY-MM-DDTHH:mm:ss")
               );
             } else {
+              token = jwt.sign(
+                { ...memberId.dataValues, access_token: "", refresh_token: "" },
+                config.jwtSecret,
+                {
+                  expiresIn: Env.expiresIn
+                }
+              );
               await Member.savingToken(
                 userData.email,
                 {
@@ -99,7 +115,7 @@ router.get("/refreshLogin", (req, res) => {
       if (err && err.name === "JsonWebTokenError") {
         res.json({ statusCode: 400 });
       } else if (err && err.name === "TokenExpiredError") {
-        let memeberWithEmail = await Member.findByEmail(decoded.email);
+        let memeberWithToken = await Member.findByToken(token);
         request.post(
           {
             url: Env.OAuth,
@@ -107,7 +123,7 @@ router.get("/refreshLogin", (req, res) => {
               grant_type: "refresh_token",
               client_id: config.client_id,
               client_secret: config.clientSecret,
-              refresh_token: memeberWithEmail.dataValues.refresh_token,
+              refresh_token: memeberWithToken.dataValues.refresh_token,
               scope: "user-info"
             }
           },
@@ -116,18 +132,22 @@ router.get("/refreshLogin", (req, res) => {
               res.json({ statusCode: 400 });
             } else {
               let authRefreshToken = JSON.parse(body);
-              let token = jwt.sign(
-                { ...memeberWithEmail.dataValues },
+              let newToken = jwt.sign(
+                {
+                  ...memeberWithToken.dataValues,
+                  access_token: "",
+                  refresh_token: ""
+                },
                 config.jwtSecret,
                 {
-                  expiresIn: config.expiresIn
+                  expiresIn: Env.expiresIn
                 }
               );
 
               await Member.savingToken(
-                memeberWithEmail.dataValues.email,
+                memeberWithToken.dataValues.email,
                 {
-                  access_token: token,
+                  access_token: newToken,
                   refresh_token: authRefreshToken.refresh_token,
                   expires_in: moment()
                     .add(1, "hours")
@@ -136,12 +156,12 @@ router.get("/refreshLogin", (req, res) => {
                 },
                 res
               );
-              res.json({ statusCode: 200, access_token: token });
+              res.json({ statusCode: 200, access_token: newToken });
             }
           }
         );
       } else {
-        res.json({ statusCode: 1000, token: cookie });
+        res.json({ statusCode: 1000, access_token: token });
       }
     });
   } else {
@@ -171,18 +191,22 @@ router.get("/refreshToken", (req, res) => {
               res.json({ statusCode: 400 });
             } else {
               let authRefreshToken = JSON.parse(body);
-              let token = jwt.sign(
-                { ...refresh_token.dataValues },
+              let newToken = jwt.sign(
+                {
+                  ...refresh_token.dataValues,
+                  access_token: "",
+                  refresh_token: ""
+                },
                 config.jwtSecret,
                 {
-                  expiresIn: config.expiresIn
+                  expiresIn: Env.expiresIn
                 }
               );
 
               await Member.savingToken(
                 refresh_token.dataValues.email,
                 {
-                  access_token: token,
+                  access_token: newToken,
                   refresh_token: authRefreshToken.refresh_token,
                   expires_in: moment()
                     .add(1, "hours")
@@ -191,7 +215,7 @@ router.get("/refreshToken", (req, res) => {
                 },
                 res
               );
-              res.json({ statusCode: 200, access_token: token });
+              res.json({ statusCode: 200, access_token: newToken });
             }
           }
         );
