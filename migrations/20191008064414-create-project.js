@@ -8,6 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      customer_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          //Required field
+          model: 'customers',
+          key: 'id'
+        }
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING(150)
@@ -18,17 +27,23 @@ module.exports = {
       },
       start_time: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       end_time: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: null
       },
       service_detail: {
         type: Sequelize.JSON
+      },
+      hidden: {
+        defaultValue: false,
+        type: Sequelize.BOOLEAN
       }
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable("projects");
+
   }
 };

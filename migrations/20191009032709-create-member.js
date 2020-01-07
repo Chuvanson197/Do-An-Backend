@@ -36,17 +36,22 @@ module.exports = {
         defaultValue: "normal"
       },
       access_token: {
-        unique: true,
         type: Sequelize.TEXT
       },
       refresh_token: {
-        unique: true,
         type: Sequelize.TEXT
       },
-      last_auth: Sequelize.DATE,
+      expires_in: {
+        allowNull: false,
+        type: Sequelize.TIME,
+      },
+      last_auth: {
+        defaultValue: null,
+        type: Sequelize.DATE,
+      },
       hidden: {
         type: Sequelize.BOOLEAN,
-        defaultValue: 0
+        defaultValue: false
       }
     });
   },

@@ -14,7 +14,7 @@ module.exports = {
       },
       phone_number: {
         allowNull: false,
-        type: Sequelize.STRING(11)
+        type: Sequelize.STRING(50)
       },
       email: {
         allowNull: false,
@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING(500)
       },
       hidden: {
-        defaultValue: 0,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       }
     });
