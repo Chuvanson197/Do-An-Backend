@@ -8,28 +8,47 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      project_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          //Required field
+          model: 'projects',
+          key: 'id'
+        }
+      },
+      staff_code: {
+        allowNull: false,
+        type: Sequelize.STRING(100),
+        references: {
+          //Required field
+          model: 'members',
+          key: 'staff_code'
+        }
+      },
       member_status: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(50)
       },
       role: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(50)
       },
       time_in: {
         allowNull: false,
         type: Sequelize.DATE
       },
       time_out: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       effort: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.FLOAT
       },
       hidden: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: 0
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       }
     });
   },
