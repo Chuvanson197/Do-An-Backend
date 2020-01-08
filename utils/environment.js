@@ -10,6 +10,7 @@ const password = "Son123456";
 const username = "soncv";
 const OAuth = "http://auth.impl.vn/oauth/token";
 const OAuthInfo = "http://auth.impl.vn/api/user-info";
+const expiresIn = "10s";
 
 module.exports = {
   accessOrigin,
@@ -17,5 +18,6 @@ module.exports = {
   password,
   username,
   OAuth,
-  OAuthInfo
+  OAuthInfo,
+  expiresIn
 };

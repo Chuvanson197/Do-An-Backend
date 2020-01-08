@@ -46,11 +46,10 @@ module.exports = {
       return null;
     });
   },
-  findByToken: token => {
+  findByToken: async token => {
     return Member.findOne({
       where: {
-        access_token: token,
-        hidden: 0
+        access_token: token
       }
     });
   },
@@ -135,8 +134,7 @@ module.exports = {
       },
       {
         where: {
-          email,
-          hidden: 0
+          email
         }
       }
     ).catch(error => {
