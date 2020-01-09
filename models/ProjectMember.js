@@ -38,8 +38,7 @@ const ProjectMember = sequelize.define(
   },
   {
     timestamps: false,
-    underscored: true,
-    tableName: "project_members"
+    underscored: true
   }
 );
 ProjectMember.belongsTo(Member, {
