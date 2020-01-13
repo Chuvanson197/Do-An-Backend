@@ -1,6 +1,7 @@
 "use strict";
 const Sequelize = require("sequelize");
 const Customer = require("./Customer");
+const InfoCustomField = require("./InfoCustomField");
 
 const Project = sequelize.define(
   "Project",
@@ -40,14 +41,22 @@ const Project = sequelize.define(
   },
   {
     timestamps: false,
-    underscored: true,
-    tableName: "projects"
+    underscored: true
   }
 );
 
 Project.belongsTo(Customer, {
   as: "customer",
   foreignKey: "customer_id"
+});
+Project.hasMany(InfoCustomField, {
+  as: "infoCustomField",
+  foreignKey: "project_id"
+});
+
+InfoCustomField.belongsTo(Project, {
+  as: "project",
+  foreignKey: "project_id"
 });
 
 module.exports = Project;

@@ -58,8 +58,7 @@ const Member = sequelize.define(
   },
   {
     timestamps: false,
-    underscored: true,
-    tableName: "members"
+    underscored: true
   }
 );
 

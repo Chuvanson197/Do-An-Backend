@@ -27,6 +27,14 @@ router.get("/:id", async function(req, res) {
   if (projects) {
     result = {
       ...projects.dataValues,
+      infoCustomField: undefined,
+      customField: projects.dataValues.infoCustomField.map(info => {
+        return {
+          idInfoCustomField: info.dataValues.id,
+          value: info.dataValues.name,
+          name: info.dataValues.customField.name
+        };
+      }),
       start_time: moment(projects.dataValues.start_time).format("x"),
       end_time: moment(projects.dataValues.end_time).format("x"),
       service_detail: JSON.parse(projects.dataValues.service_detail)

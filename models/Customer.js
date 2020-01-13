@@ -30,7 +30,7 @@ const Customer = sequelize.define(
       defaultValue: 0
     }
   },
-  { timestamps: false, underscored: true, tableName: "customers" }
+  { timestamps: false, underscored: true }
 );
 
 module.exports = Customer;
