@@ -6,7 +6,7 @@ module.exports = {
   ],
   OAuth: "http://auth.impl.vn/oauth/token",
   OAuthInfo: "http://auth.impl.vn/api/user-info",
-  expiresIn: "30p",
+  expiresIn: "30m",
   grant_type: "authorization_code",
   jwtSecret:
     "nbsbskfdk2135frfasfad32131aweqwe6565665651a2sfd1a3sdfa321sda3sdaaasd"

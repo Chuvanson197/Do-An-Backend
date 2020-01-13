@@ -33,6 +33,7 @@ route.post("/", async (req, res) => {
 
 route.get("/", async (req, res) => {
   let customFields = await CustomField.getAllCustomField();
+  console.log(customFields);
   res.json({ status: 200, listCustomField: customFields });
 });
 

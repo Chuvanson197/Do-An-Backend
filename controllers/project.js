@@ -56,12 +56,10 @@ module.exports = {
         {
           model: InfoCustomField,
           as: "infoCustomField",
-          attributes: ["id", "name"],
           include: [
             {
               model: CustomField,
-              as: "customField",
-              attributes: ["name"]
+              as: "customField"
             }
           ]
         }
@@ -84,9 +82,20 @@ module.exports = {
       res.status(400).json({ message: "projects.createProject.message.error" })
     );
   },
-  update(id, req, res) {
+  async update(id, req, res) {
     const project = req.body;
-    return (result = Project.update(
+    const { customField } = project;
+    if (customField && customField.length > 0) {
+      Promise.all(
+        customField.map(field =>
+          InfoCustomField.update(
+            { name: field.name },
+            { where: { id: field.idInfoCustomField } }
+          )
+        )
+      );
+    }
+    return await Project.update(
       {
         customer_id: project.customer_id,
         name: project.name,
@@ -102,11 +111,7 @@ module.exports = {
           id
         }
       }
-    ).catch(() =>
-      res.status(400).json({
-        message: "projects.updateProject.message.error"
-      })
-    ));
+    );
   },
   remove(id, res) {
     return (result = Project.update(
