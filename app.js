@@ -36,12 +36,12 @@ app.use(
 );
 app.use("/api/customFields", customField);
 app.use("/api/auth", authRouter);
-app.use("/api/projects", projectRouter);
 
 app.use(authencation);
 
 app.use("/api/customers", customerRouter);
 app.use("/api/members", memberRouter);
+app.use("/api/projects", projectRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
