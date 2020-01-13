@@ -32,7 +32,8 @@ router.get("/:id", async function(req, res) {
         return {
           idInfoCustomField: info.dataValues.id,
           value: info.dataValues.name,
-          name: info.dataValues.customField.name
+          name: info.dataValues.customField.name,
+          require: info.dataValues.customField.require
         };
       }),
       start_time: moment(projects.dataValues.start_time).format("x"),
