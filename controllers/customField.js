@@ -4,16 +4,6 @@ const Project = require("../models/Project");
 
 module.exports = {
   createCustomField: async customField => {
-    CustomField.findOne({
-      attributes: ["name"],
-      include: [
-        {
-          model: InfoCustomField,
-          as: "infocustomField",
-          attributes: ["id", "name"]
-        }
-      ]
-    }).then(data => console.log(data));
     return await CustomField.create(customField);
   },
   findCustomFieldByName: async name => {

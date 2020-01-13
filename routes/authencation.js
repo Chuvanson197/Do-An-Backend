@@ -5,7 +5,6 @@ var jwt = require("jsonwebtoken");
 const moment = require("moment");
 const cookie = require("cookie");
 
-var config = require("../config/authConfig");
 const Env = require("../utils/environment");
 
 var Member = require("../controllers/member");
@@ -22,10 +21,10 @@ router.post("/login", function(req, res) {
     {
       url: Env.OAuth,
       form: {
-        grant_type: config.grant_type,
-        client_id: config.client_id,
-        client_secret: config.clientSecret,
-        redirect_uri: config.redirect_uri,
+        grant_type: Env.grant_type,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        redirect_uri: process.env.REDIRECT_URI,
         code: accessCode
       }
     },
@@ -60,7 +59,7 @@ router.post("/login", function(req, res) {
                   refresh_token: "",
                   type: "normal"
                 },
-                config.jwtSecret,
+                Env.jwtSecret,
                 {
                   expiresIn: Env.expiresIn
                 }
@@ -77,7 +76,7 @@ router.post("/login", function(req, res) {
             } else {
               token = jwt.sign(
                 { ...memberId.dataValues, access_token: "", refresh_token: "" },
-                config.jwtSecret,
+                Env.jwtSecret,
                 {
                   expiresIn: Env.expiresIn
                 }
@@ -111,7 +110,7 @@ router.post("/login", function(req, res) {
 router.get("/refreshLogin", (req, res) => {
   if (req.headers.cookie && cookie.parse(req.headers.cookie)["access-token"]) {
     let token = cookie.parse(req.headers.cookie)["access-token"];
-    jwt.verify(token, config.jwtSecret, async (err, decoded) => {
+    jwt.verify(token, Env.jwtSecret, async (err, decoded) => {
       if (err && err.name === "JsonWebTokenError") {
         res.json({ statusCode: 400 });
       } else if (err && err.name === "TokenExpiredError") {
@@ -121,8 +120,8 @@ router.get("/refreshLogin", (req, res) => {
             url: Env.OAuth,
             form: {
               grant_type: "refresh_token",
-              client_id: config.client_id,
-              client_secret: config.clientSecret,
+              client_id: process.env.CLIENT_ID,
+              client_secret: process.env.CLIENT_SECRET,
               refresh_token: memeberWithToken.dataValues.refresh_token,
               scope: "user-info"
             }
@@ -138,7 +137,7 @@ router.get("/refreshLogin", (req, res) => {
                   access_token: "",
                   refresh_token: ""
                 },
-                config.jwtSecret,
+                Env.jwtSecret,
                 {
                   expiresIn: Env.expiresIn
                 }
@@ -172,7 +171,7 @@ router.get("/refreshLogin", (req, res) => {
 router.get("/refreshToken", (req, res) => {
   if (req.headers.cookie && cookie.parse(req.headers.cookie)["access-token"]) {
     let token = cookie.parse(req.headers.cookie)["access-token"];
-    jwt.verify(token, config.jwtSecret, async (err, decoded) => {
+    jwt.verify(token, Env.jwtSecret, async (err, decoded) => {
       if (err && err.name === "TokenExpiredError") {
         let refresh_token = await Member.findByToken(token);
         request.post(
@@ -180,8 +179,8 @@ router.get("/refreshToken", (req, res) => {
             url: Env.OAuth,
             form: {
               grant_type: "refresh_token",
-              client_id: config.client_id,
-              client_secret: config.clientSecret,
+              client_id: process.env.CLIENT_ID,
+              client_secret: process.env.CLIENT_SECRET,
               refresh_token: refresh_token.dataValues.refresh_token,
               scope: "user-info"
             }
@@ -197,7 +196,7 @@ router.get("/refreshToken", (req, res) => {
                   access_token: "",
                   refresh_token: ""
                 },
-                config.jwtSecret,
+                Env.jwtSecret,
                 {
                   expiresIn: Env.expiresIn
                 }
