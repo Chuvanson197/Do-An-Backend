@@ -14,6 +14,7 @@ const customerRouter = require("./routes/customer");
 const projectRouter = require("./routes/project");
 const memberRouter = require("./routes/member");
 const authencation = require("./middleware/authentication");
+const customField = require("./routes/customField");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(
     credentials: true
   })
 );
+app.use("/api/customFields", customField);
 app.use("/api/auth", authRouter);
 
 app.use(authencation);
@@ -56,6 +58,5 @@ app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render("error");
 });
-
 
 module.exports = app;

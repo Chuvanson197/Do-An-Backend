@@ -7,6 +7,8 @@ const Project = require("../models/Project");
 const Customer = require("../models/Customer");
 const ProjectMember = require("../models/ProjectMember");
 const Member = require("../models/Member");
+const InfoCustomField = require("../models/InfoCustomField");
+const CustomField = require("../models/CustomField");
 
 module.exports = {
   findAll() {
@@ -50,13 +52,25 @@ module.exports = {
             "address",
             "hidden"
           ]
+        },
+        {
+          model: InfoCustomField,
+          as: "infoCustomField",
+          attributes: ["id", "name"],
+          include: [
+            {
+              model: CustomField,
+              as: "customField",
+              attributes: ["name"]
+            }
+          ]
         }
       ]
-    }).catch(() =>
+    }).catch(err => {
       res.status(400).json({
         message: "projects.getProjects.message.error"
-      })
-    );
+      });
+    });
   },
   create(req, res) {
     const project = req.body;
