@@ -123,13 +123,13 @@ router.post("/remove/:id", async function(req, res) {
 /* PUT update project api */
 router.put("/:id", async function(req, res) {
   const result = await Project.update(req.params.id, req, res);
-  if (!result[0]) {
-    res.status(400).json({
-      message: "projects.updateProject.message.error"
+  if (result) {
+    res.json({
+      message: "projects.updateProject.message.success"
     });
   } else {
     res.json({
-      message: "projects.updateProject.message.success"
+      message: "projects.updateProject.message.error"
     });
   }
 });
