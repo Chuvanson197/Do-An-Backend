@@ -46,7 +46,7 @@ route.delete("/:idCustomField", async (req, res) => {
   }
 });
 
-route.post("/:idCustomField/assigneProject", async (req, res) => {
+route.post("/:idCustomField/assigneeProject", async (req, res) => {
   const { projects, idCustomField } = req.body;
   if (projects && idCustomField && projects.length > 0) {
     let listProjectAssignee = await CustomField.assigneeProject(
@@ -63,26 +63,23 @@ route.post("/:idCustomField/assigneProject", async (req, res) => {
   }
 });
 
-route.delete(
-  "/:idCustomField/assigneProject/:idCustomField",
-  async (req, res) => {
-    const { projects } = req.body;
-    const { idCustomField } = req.params;
-    if (projects && idCustomField && projects.length > 0) {
-      let listProjectAssignee = await CustomField.removeAssigneeProject(
-        idCustomField,
-        projects
-      );
-      if (listProjectAssignee) {
-        res.json({ status: 200, listProjectAssignee });
-      } else {
-        res.json({ status: 400 });
-      }
+route.delete("/:idCustomField/assigneeProject/", async (req, res) => {
+  const { projects } = req.body;
+  const { idCustomField } = req.params;
+  if (projects && idCustomField && projects.length > 0) {
+    let listProjectAssignee = await CustomField.removeAssigneeProject(
+      idCustomField,
+      projects
+    );
+    if (listProjectAssignee) {
+      res.json({ status: 200, listProjectAssignee });
     } else {
       res.json({ status: 400 });
     }
+  } else {
+    res.json({ status: 400 });
   }
-);
+});
 
 route.put("/:idCustomField", async (req, res) => {
   const { name, require } = req.body;
