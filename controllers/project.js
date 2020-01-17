@@ -86,10 +86,10 @@ module.exports = {
     const project = req.body;
     const { customField } = project;
     if (customField && customField.length > 0) {
-      Promise.all(
+      await Promise.all(
         customField.map(field =>
           InfoCustomField.update(
-            { name: field.name },
+            { name: field.value },
             { where: { id: field.idInfoCustomField } }
           )
         )
@@ -154,8 +154,6 @@ module.exports = {
         }
       ]
     }).catch(error => {
-      console.log(error);
-
       res.status(400).json({
         message: "projects.getMembersList.message.error"
       });
