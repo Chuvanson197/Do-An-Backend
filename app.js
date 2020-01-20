@@ -35,6 +35,7 @@ app.use(
   })
 );
 app.use("/api/customFields", customField);
+
 app.use("/api/auth", authRouter);
 
 app.use(authencation);
