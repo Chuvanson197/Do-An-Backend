@@ -14,6 +14,7 @@ module.exports = {
   },
   getAllCustomField: async () => {
     return await CustomField.findAll({
+      order: [["id", "DESC"]],
       include: [
         {
           model: InfoCustomField,

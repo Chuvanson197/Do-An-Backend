@@ -49,12 +49,21 @@ route.delete("/:idCustomField", async (req, res) => {
 route.post("/:idCustomField/assigneeProject", async (req, res) => {
   const { projects, idCustomField } = req.body;
   if (projects && idCustomField && projects.length > 0) {
-    let listProjectAssignee = await CustomField.assigneeProject(
-      idCustomField,
-      projects
+    let listCheckExistProject = await Promise.all(
+      projects.map(project_id =>
+        InfoCustomField.getByProjectAndCustomField(project_id, idCustomField)
+      )
     );
-    if (listProjectAssignee) {
-      res.json({ status: 200, listProjectAssignee });
+    if (listCheckExistProject.filter(exist => exist).length === 0) {
+      let listProjectAssignee = await CustomField.assigneeProject(
+        idCustomField,
+        projects
+      );
+      if (listProjectAssignee) {
+        res.json({ status: 200, listProjectAssignee });
+      } else {
+        res.json({ status: 400 });
+      }
     } else {
       res.json({ status: 400 });
     }
