@@ -70,17 +70,30 @@ module.exports = {
       });
     });
   },
-  create(req, res) {
-    const project = req.body;
-    return Project.create({
-      ...project,
-      start_time: moment(project.start_time).format("YYYY-MM-DDTHH:mm:ss"),
-      end_time: project.end_time
-        ? moment(project.end_time).format("YYYY-MM-DDTHH:mm:ss")
-        : null
-    }).catch(() =>
-      res.status(400).json({ message: "projects.createProject.message.error" })
-    );
+  async create(req, res) {
+    try {
+      const project = req.body;
+      let projectAdded = await Project.create({
+        ...project,
+        start_time: moment(project.start_time).format("YYYY-MM-DDTHH:mm:ss"),
+        end_time: project.end_time
+          ? moment(project.end_time).format("YYYY-MM-DDTHH:mm:ss")
+          : null,
+        staff_code: undefined
+      });
+      await ProjectMember.create({
+        staff_code: project.staff_code,
+        role: "po",
+        member_status: "working",
+        project_id: projectAdded.dataValues.id,
+        effort: 0,
+        hidden: 0,
+        time_in: moment(project.start_time).format("YYYY-MM-DDTHH:mm:ss")
+      });
+      return projectAdded;
+    } catch (error) {
+      res.status(400).json({ message: "projects.createProject.message.error" });
+    }
   },
   async update(id, req, res) {
     const project = req.body;
