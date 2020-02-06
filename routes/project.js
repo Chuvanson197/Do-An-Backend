@@ -22,13 +22,13 @@ router.get("/", async function(req, res) {
 
 /* GET get project by project id api */
 router.get("/:id", async function(req, res) {
-  const projects = await Project.findById(req.params.id);
+  const projects = await Project.findById(req.params.id, res);
   let result = null;
   if (projects) {
     result = {
-      ...projects.dataValues,
+      ...projects[0].dataValues,
       infoCustomField: undefined,
-      customField: projects.dataValues.infoCustomField.map(info => {
+      customField: projects[0].dataValues.infoCustomField.map(info => {
         return {
           idInfoCustomField: info.dataValues.id,
           value: info.dataValues.name,
@@ -36,9 +36,10 @@ router.get("/:id", async function(req, res) {
           require: info.dataValues.customField.require
         };
       }),
-      start_time: moment(projects.dataValues.start_time).format("x"),
-      end_time: moment(projects.dataValues.end_time).format("x"),
-      service_detail: JSON.parse(projects.dataValues.service_detail)
+      start_time: moment(projects[0].dataValues.start_time).format("x"),
+      end_time: moment(projects[0].dataValues.end_time).format("x"),
+      service_detail: JSON.parse(projects[0].dataValues.service_detail),
+      assigneeProject: projects[1]
     };
   }
   res.json(result);

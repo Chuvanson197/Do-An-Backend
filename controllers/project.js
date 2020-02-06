@@ -7,6 +7,7 @@ const Project = require("../models/Project");
 const Customer = require("../models/Customer");
 const ProjectMember = require("../models/ProjectMember");
 const Member = require("../models/Member");
+const ProjectMemberRelation = require("../models/ProjectMemberRelations");
 const InfoCustomField = require("../models/InfoCustomField");
 const CustomField = require("../models/CustomField");
 
@@ -27,48 +28,47 @@ module.exports = {
     });
   },
   findById(id, res) {
-    return Project.findOne({
-      attributes: [
-        "id",
-        "name",
-        "status",
-        "start_time",
-        "end_time",
-        "service_detail"
-      ],
-      where: {
-        hidden: 0,
-        id
-      },
-      include: [
-        {
-          model: Customer,
-          as: "customer",
-          attributes: [
-            "id",
-            "name",
-            "phone_number",
-            "email",
-            "address",
-            "hidden"
-          ]
+    return Promise.all([
+      Project.findOne({
+        attributes: [
+          "id",
+          "name",
+          "status",
+          "start_time",
+          "end_time",
+          "service_detail"
+        ],
+        where: {
+          hidden: 0,
+          id
         },
-        {
-          model: InfoCustomField,
-          as: "infoCustomField",
-          include: [
-            {
-              model: CustomField,
-              as: "customField"
-            }
-          ]
-        }
-      ]
-    }).catch(err => {
-      res.status(400).json({
-        message: "projects.getProjects.message.error"
-      });
-    });
+        include: [
+          {
+            model: Customer,
+            as: "customer",
+            attributes: [
+              "id",
+              "name",
+              "phone_number",
+              "email",
+              "address",
+              "hidden"
+            ]
+          },
+          {
+            model: InfoCustomField,
+            as: "infoCustomField",
+            include: [
+              {
+                model: CustomField,
+                as: "customField"
+              }
+            ]
+          }
+        ]
+      }),
+      ProjectMemberRelation.findAll({ where: { project_id: id } })
+    ]);
   },
   async create(req, res) {
     try {
@@ -89,6 +89,12 @@ module.exports = {
         effort: 0,
         hidden: 0,
         time_in: moment(project.start_time).format("YYYY-MM-DDTHH:mm:ss")
+      });
+      await ProjectMemberRelation.create({
+        role_link: "po",
+        project_id: projectAdded.dataValues.id,
+        member_link_id: project.staff_code,
+        member_be_link_id: "Default"
       });
       return projectAdded;
     } catch (error) {
@@ -205,6 +211,16 @@ module.exports = {
     );
   },
   addMember(req, res) {
+    Promise.all(
+      req.body.assignee.map(asi =>
+        ProjectMemberRelation.create({
+          role_link: req.body.role,
+          project_id: req.body.project_id,
+          member_link_id: req.body.staff_code,
+          member_be_link_id: asi
+        })
+      )
+    );
     return ProjectMember.create({
       ...req.body,
       time_in: moment(req.body.time_in).format("YYYY-MM-DDTHH:mm:ss"),
