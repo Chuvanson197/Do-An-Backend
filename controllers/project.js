@@ -273,5 +273,29 @@ module.exports = {
         message: "projects.removeMemberFromProject.message.error"
       })
     ));
+  },
+  async getProjectsByDate(req, res) {
+    const { start, end } = req.query;
+    const timeStart = new Date(start);
+    const timeEnd = new Date(end);
+    let listProject = await Project.findAll({
+      where: {
+        [Op.not]: {
+          [Op.or]: [
+            {
+              start_time: { [Op.gt]: timeEnd }
+            },
+            {
+              end_time: { [Op.lt]: timeStart }
+            }
+          ]
+        }
+      }
+    });
+    if (listProject) {
+      res.json({ status: 200, listProject });
+    } else {
+      res.json({ status: 400 });
+    }
   }
 };
