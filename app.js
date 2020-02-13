@@ -37,9 +37,9 @@ app.use(
 
 app.use("/api/auth", authRouter);
 
-app.use("/api/customers", customerRouter);
 app.use(authencation);
 
+app.use("/api/customers", customerRouter);
 app.use("/api/members", memberRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/customFields", customField);
