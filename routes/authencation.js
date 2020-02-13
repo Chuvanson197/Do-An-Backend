@@ -227,4 +227,13 @@ router.get("/refreshToken", (req, res) => {
   }
 });
 
+router.post("/logout", async (req, res) => {
+  const userLogout = await Member.logout(req.body);
+  if (userLogout) {
+    res.json({ status: 200 });
+  } else {
+    res.json({ status: 400 });
+  }
+});
+
 module.exports = router;

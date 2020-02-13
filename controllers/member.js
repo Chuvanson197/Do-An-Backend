@@ -156,5 +156,18 @@ module.exports = {
         message: "members.removeMember.message.error"
       })
     ));
+  },
+  logout(user) {
+    return Member.update(
+      {
+        access_token: "",
+        refresh_token: ""
+      },
+      {
+        where: {
+          staff_code: user.staff_code
+        }
+      }
+    );
   }
 };

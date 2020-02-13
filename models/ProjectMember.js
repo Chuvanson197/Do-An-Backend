@@ -46,9 +46,5 @@ ProjectMember.belongsTo(Member, {
   foreignKey: "staff_code",
   targetKey: "staff_code"
 });
-ProjectMember.belongsTo(Project, {
-  as: "project_detail",
-  foreignKey: "project_id"
-});
 
 module.exports = ProjectMember;
