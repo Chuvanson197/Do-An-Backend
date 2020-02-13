@@ -20,6 +20,8 @@ router.get("/", async function(req, res) {
   res.json(result);
 });
 
+router.get("/date", Project.getProjectsByDate);
+
 /* GET get project by project id api */
 router.get("/:id", async function(req, res) {
   const projects = await Project.findById(req.params.id, res);
