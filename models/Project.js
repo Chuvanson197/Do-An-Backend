@@ -2,6 +2,7 @@
 const Sequelize = require("sequelize");
 const Customer = require("./Customer");
 const InfoCustomField = require("./InfoCustomField");
+const ProjectMember = require("./ProjectMember");
 
 const Project = sequelize.define(
   "Project",
@@ -51,6 +52,11 @@ Project.belongsTo(Customer, {
 });
 Project.hasMany(InfoCustomField, {
   as: "infoCustomField",
+  foreignKey: "project_id"
+});
+
+Project.hasMany(ProjectMember, {
+  as: "project_member_detail",
   foreignKey: "project_id"
 });
 

@@ -15,6 +15,8 @@ router.get("/:id", async function(req, res) {
   res.json(customer);
 });
 
+router.get("/:id/projects", Customer.getProjectByCustomer);
+
 /* POST add new customer api */
 router.post("/", async function(req, res) {
   const customer = await Customer.create(req, res);

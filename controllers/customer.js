@@ -1,4 +1,7 @@
 const Customer = require("../models/Customer");
+const Project = require("../models/Project");
+const ProjectMember = require("../models/ProjectMember");
+
 module.exports = {
   findAll() {
     return Customer.findAll({
@@ -66,5 +69,21 @@ module.exports = {
         message: "customers.removeCustomer.message.error"
       })
     ));
+  },
+  async getProjectByCustomer(req, res) {
+    let listProject = await Project.findAll({
+      where: { customer_id: req.params.id },
+      include: [
+        {
+          model: ProjectMember,
+          as: "project_member_detail"
+        }
+      ]
+    });
+    if (listProject) {
+      res.json({ status: 200, listProject });
+    } else {
+      res.json({ status: 400 });
+    }
   }
 };
