@@ -297,5 +297,31 @@ module.exports = {
     } else {
       res.json({ status: 400 });
     }
+  },
+  async getProjectByUser(req, res) {
+    let { idUser } = req.params;
+    const listProject = await Project.findAll({
+      include: [
+        {
+          model: ProjectMember,
+          as: "project_member_detail",
+          where: {
+            staff_code: idUser
+          }
+        }
+      ]
+    });
+    if (listProject) {
+      let result = listProject.map(project => {
+        return {
+          ...project.dataValues,
+          start_time: moment(project.start_time).format("x"),
+          end_time: moment(project.end_time).format("x")
+        };
+      });
+      res.json(result);
+    } else {
+      res.json([]);
+    }
   }
 };
