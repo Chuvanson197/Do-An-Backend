@@ -22,6 +22,8 @@ router.get("/", async function(req, res) {
 
 router.get("/date", Project.getProjectsByDate);
 
+router.get("/byUser/:idUser", Project.getProjectByUser);
+
 /* GET get project by project id api */
 router.get("/:id", async function(req, res) {
   const projects = await Project.findById(req.params.id, res);

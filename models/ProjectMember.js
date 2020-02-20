@@ -12,6 +12,14 @@ const ProjectMember = sequelize.define(
       primaryKey: true,
       type: Sequelize.INTEGER
     },
+    project_id: {
+      allowNull: false,
+      type: Sequelize.INTEGER
+    },
+    staff_code: {
+      allowNull: false,
+      type: Sequelize.STRING(100)
+    },
     member_status: {
       allowNull: false,
       type: Sequelize.STRING
