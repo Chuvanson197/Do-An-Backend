@@ -305,9 +305,15 @@ module.exports = {
         {
           model: ProjectMember,
           as: "project_member_detail",
+          attributes: [],
           where: {
             staff_code: idUser
           }
+        },
+        {
+          model: Customer,
+          as: "customer",
+          attributes: ["id", "name", "phone_number", "email", "address"]
         }
       ]
     });
