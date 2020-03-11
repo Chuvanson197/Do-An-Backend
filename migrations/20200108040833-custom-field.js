@@ -16,6 +16,18 @@ module.exports = {
       require: {
         allowNull: false,
         type: Sequelize.BOOLEAN
+      },
+      default_value: {
+        allowNull: false,
+        type: Sequelize.STRING(100)
+      },
+      value_type: {
+        allowNull: false,
+        type: Sequelize.STRING(100)
+      },
+      is_global: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
       }
     });
   },

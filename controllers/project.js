@@ -73,6 +73,10 @@ module.exports = {
   async create(req, res) {
     try {
       const project = req.body;
+      const listGlobalCustomFields = await CustomField.findAll({
+        attributes: ["id", "default_value"],
+        where: { is_global: 1 }
+      })
       let projectAdded = await Project.create({
         ...project,
         start_time: moment(project.start_time).format("YYYY-MM-DDTHH:mm:ss"),
@@ -96,6 +100,15 @@ module.exports = {
         member_link_id: project.staff_code,
         member_be_link_id: "Default"
       });
+      //When create project, link this project to all global custom fields
+      await listGlobalCustomFields.map(customField => {
+        InfoCustomField.create({
+          name: customField.dataValues.default_value ? customField.dataValues.default_value : "",
+          project_id: projectAdded.dataValues.id,
+          custom_field_id: customField.dataValues.id
+        })
+      }
+      )
       return projectAdded;
     } catch (error) {
       res.status(400).json({ message: "projects.createProject.message.error" });
@@ -307,7 +320,8 @@ module.exports = {
           as: "project_member_detail",
           attributes: [],
           where: {
-            staff_code: idUser
+            staff_code: idUser,
+            hidden: 0
           }
         },
         {

@@ -5,7 +5,9 @@ const CustomField = require("../controllers/customField");
 const InfoCustomField = require("../controllers/infoCustomField");
 
 route.post("/", async (req, res) => {
-  const { name, require, assignee } = req.body;
+  const { name, require, assignee, is_global } = req.body;
+  const value_type = req.body.valueType;
+  const default_value = req.body.defaultValue;
   if (name) {
     let existCustomField = await CustomField.findCustomFieldByName(name);
     if (existCustomField) {
@@ -13,12 +15,15 @@ route.post("/", async (req, res) => {
     } else {
       let customFieldCreated = await CustomField.createCustomField({
         name,
-        require
+        require,
+        default_value,
+        value_type,
+        is_global
       });
       Promise.all(
         assignee.map(idProject =>
           InfoCustomField.createInfoCustomField({
-            name: require ? "require" : "",
+            name: default_value ? default_value : "",
             project_id: idProject,
             custom_field_id: customFieldCreated.dataValues.id
           })

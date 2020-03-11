@@ -15,6 +15,7 @@ const projectRouter = require("./routes/project");
 const memberRouter = require("./routes/member");
 const authencation = require("./middleware/authentication");
 const customField = require("./routes/customField");
+const data = require("./routes/data")
 
 const app = express();
 
@@ -43,14 +44,16 @@ app.use("/api/customers", customerRouter);
 app.use("/api/members", memberRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/customFields", customField);
+app.use("/api/data", data);
+
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
