@@ -2,33 +2,33 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("project_member_relations", {
+    return queryInterface.createTable("base_custom_fields", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      project_id: {
+      name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(100)
       },
-      role_link: {
+      require: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.BOOLEAN
       },
-      member_link_id: {
+      default_value: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(100)
       },
-      member_be_link_id: {
+      value_type: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(100)
       }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("project_member_relations");
+    return queryInterface.dropTable("base_custom_fields");
   }
 };
