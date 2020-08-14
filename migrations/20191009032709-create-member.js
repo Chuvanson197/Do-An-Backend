@@ -25,6 +25,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(100)
       },
+      google_id: {
+        allowNull: false,
+        type: Sequelize.STRING(255),
+      },
       permission: {
         allowNull: false,
         type: Sequelize.STRING(50),

@@ -10,101 +10,57 @@ const Env = require("../utils/environment");
 var Member = require("../controllers/member");
 
 /* POST login api */
-router.post("/login", function(req, res) {
-  let { accessCode } = req.body;
-  if (!accessCode) {
-    res.status(401).json({
+router.post("/login", async function(req, res) {
+  const userData = req.body;
+  
+  // for (const key in userData.accessCode) {
+  //   console.log(key, userData.accessCode[key]);
+  // }
+  const profileObj = userData.accessCode.profileObj;
+  const googleId = userData.accessCode.googleId;
+  const {email, name} = profileObj;
+  
+  let member = await Member.findByEmail(email);
+  if(!member){
+    member = await Member.addNewMember(
+      {email, name, google_id: googleId},
+      {access_token: '', refresh_token: '' },
+      moment()
+        .add(1, "hours")
+        .format("YYYY-MM-DDTHH:mm:ss"),
+      moment().format("YYYY-MM-DDTHH:mm:ss")
+    );
+  }
+  console.log('member', member);
+  if(member.google_id !== googleId){
+    return res.status(401).json({
       message: "Access code is required"
     });
   }
-  request.post(
+  token = jwt.sign(
+    { ...member.dataValues, access_token: "", refresh_token: "",  },
+    Env.jwtSecret,
     {
-      url: Env.OAuth,
-      form: {
-        grant_type: Env.grant_type,
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        redirect_uri: process.env.REDIRECT_URI,
-        code: accessCode
-      }
-    },
-    function(error, httpResponse, body) {
-      if (error || httpResponse.statusCode === 400) {
-        res.status(401).json({ message: "Unauthorized user!" });
-      } else {
-        let authData = JSON.parse(body);
-        request(
-          {
-            url: Env.OAuthInfo,
-            headers: {
-              Authorization: `${authData.token_type} ${authData.access_token}`
-            }
-          },
-          async function(error, httpResponse, user) {
-            if (error) {
-              res.status(401).json({
-                message: "Unauthorized user!"
-              });
-              redirect_uri;
-            }
-            let userData = JSON.parse(user);
-            let token = "";
-            const memberId = await Member.findByEmail(userData.email);
-            if (!memberId) {
-              token = jwt.sign(
-                {
-                  ...userData,
-                  ...authData,
-                  access_token: "",
-                  refresh_token: "",
-                  type: "normal"
-                },
-                Env.jwtSecret,
-                {
-                  expiresIn: Env.expiresIn
-                }
-              );
-
-              await Member.addNewMember(
-                userData,
-                { ...authData, access_token: token },
-                moment()
-                  .add(1, "hours")
-                  .format("YYYY-MM-DDTHH:mm:ss"),
-                moment().format("YYYY-MM-DDTHH:mm:ss")
-              );
-            } else {
-              token = jwt.sign(
-                { ...memberId.dataValues, access_token: "", refresh_token: "" },
-                Env.jwtSecret,
-                {
-                  expiresIn: Env.expiresIn
-                }
-              );
-              await Member.savingToken(
-                userData.email,
-                {
-                  access_token: token,
-                  refresh_token: authData.refresh_token,
-                  expires_in: moment()
-                    .add(1, "hours")
-                    .format("YYYY-MM-DDTHH:mm:ss"),
-                  last_auth: moment().format("YYYY-MM-DDTHH:mm:ss")
-                },
-                res
-              );
-            }
-            res.json({
-              access_token: token
-            });
-            // handle saving access_token
-
-            // Encrypt user data
-          }
-        );
-      }
+      expiresIn: Env.expiresIn
     }
   );
+  await Member.savingToken(
+    email,
+    {
+      access_token: token,
+      refresh_token: '',
+      expires_in: moment()
+        .add(1, "hours")
+        .format("YYYY-MM-DDTHH:mm:ss"),
+      last_auth: moment().format("YYYY-MM-DDTHH:mm:ss")
+    },
+    res
+  );
+  res.json({
+    access_token: token
+  });
+
+
 });
 
 router.get("/refreshLogin", (req, res) => {

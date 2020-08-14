@@ -20,13 +20,17 @@ const Member = sequelize.define(
       type: Sequelize.STRING(100)
     },
     phone_number: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.STRING(50)
     },
     email: {
       allowNull: false,
       unique: true,
       type: Sequelize.STRING(100)
+    },
+    google_id: {
+      allowNull: false,
+      type: Sequelize.STRING(255),
     },
     permission: {
       allowNull: false,

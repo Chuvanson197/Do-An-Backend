@@ -36,7 +36,8 @@ module.exports = {
         "full_name",
         "phone_number",
         "email",
-        "type"
+        "google_id",
+        "type",
       ],
       where: {
         email,
@@ -116,6 +117,7 @@ module.exports = {
     return await Member.create({
       full_name: user["name"] || "",
       email: user["email"],
+      google_id: user["google_id"],
       staff_code: `${Math.random()}`,
       phone_number: `${Math.random()}`,
       access_token: authToken.access_token,
@@ -139,6 +141,7 @@ module.exports = {
       }
     ).catch(error => {
       res.send(error);
+      throw error;
     });
   },
   remove(staff_code, req, res) {
